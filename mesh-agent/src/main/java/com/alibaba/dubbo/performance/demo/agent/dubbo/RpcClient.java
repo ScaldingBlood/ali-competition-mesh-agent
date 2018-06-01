@@ -21,7 +21,11 @@ public class RpcClient {
 
     private ConnecManager connectManager;
 
-    public RpcClient(IRegistry registry){
+    public RpcClient(IRegistry registry) {
+        this.connectManager = new ConnecManager();
+    }
+
+    public RpcClient() {
         this.connectManager = new ConnecManager();
     }
 
@@ -47,14 +51,38 @@ public class RpcClient {
         logger.info("requestId=" + request.getId());
 
         RpcFuture future = new RpcFuture();
-        RpcRequestHolder.put(String.valueOf(request.getId()),future);
+        RpcRequestHolder.put(String.valueOf(request.getId()), future);
 
         channel.writeAndFlush(request);
 
         Object result = null;
         try {
             result = future.get();
-        }catch (Exception e){
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public Object invoke(String invocation) throws Exception {
+        Channel channel = connectManager.getChannel();
+
+        Request request = new Request();
+        request.setVersion("2.0.0");
+        request.setTwoWay(true);
+        request.setData(invocation);
+
+        logger.info("requestId=" + request.getId());
+
+        RpcFuture future = new RpcFuture();
+        RpcRequestHolder.put(String.valueOf(request.getId()), future);
+
+        channel.writeAndFlush(request);
+
+        Object result = null;
+        try {
+            result = future.get();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return result;

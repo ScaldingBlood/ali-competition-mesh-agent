@@ -24,6 +24,7 @@ elif [[ "$1" == "provider-small" ]]; then
        -Dtype=provider \
        -Ddubbo.protocol.port=20880 \
        -Dserver.port=30000 \
+       -Dagent.port=8888 \
        -Detcd.url=$ETCD_URL \
        -Dlogs.dir=/root/logs \
        /root/dists/mesh-agent.jar
@@ -35,6 +36,7 @@ elif [[ "$1" == "provider-medium" ]]; then
        -Dtype=provider \
        -Ddubbo.protocol.port=20880 \
        -Dserver.port=30000 \
+        -Dagent.port=8888 \
        -Detcd.url=$ETCD_URL \
        -Dlogs.dir=/root/logs \
        /root/dists/mesh-agent.jar
@@ -46,6 +48,7 @@ elif [[ "$1" == "provider-large" ]]; then
        -Dtype=provider \
        -Ddubbo.protocol.port=20880 \
        -Dserver.port=30000 \
+       -Dagent.port=8888 \
        -Detcd.url=$ETCD_URL \
        -Dlogs.dir=/root/logs \
        /root/dists/mesh-agent.jar
