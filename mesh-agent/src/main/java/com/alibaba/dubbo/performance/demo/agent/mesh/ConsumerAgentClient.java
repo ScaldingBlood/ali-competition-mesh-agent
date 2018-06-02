@@ -1,9 +1,6 @@
 package com.alibaba.dubbo.performance.demo.agent.mesh;
 
-import com.alibaba.dubbo.performance.demo.agent.dubbo.model.JsonUtils;
-import com.alibaba.dubbo.performance.demo.agent.dubbo.model.RpcFuture;
-import com.alibaba.dubbo.performance.demo.agent.dubbo.model.RpcInvocation;
-import com.alibaba.dubbo.performance.demo.agent.dubbo.model.RpcRequestHolder;
+import com.alibaba.dubbo.performance.demo.agent.dubbo.model.*;
 import com.alibaba.dubbo.performance.demo.agent.mesh.model.AgentRequest;
 import com.alibaba.dubbo.performance.demo.agent.registry.Endpoint;
 import io.netty.channel.Channel;
@@ -12,7 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
-public class RpcConsumerClient {
+public class ConsumerAgentClient {
     private AgentConnectManager connectManager = new AgentConnectManager();
 
     public Object sendRequest(Endpoint endpoint, String interfaceName, String method, String parameterTypesString, String parameter) throws Exception {

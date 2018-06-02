@@ -1,8 +1,7 @@
 package com.alibaba.dubbo.performance.demo.agent;
 
 import com.alibaba.dubbo.performance.demo.agent.dubbo.RpcClient;
-import com.alibaba.dubbo.performance.demo.agent.mesh.RpcConsumerClient;
-import com.alibaba.dubbo.performance.demo.agent.mesh.RpcProviderServer;
+import com.alibaba.dubbo.performance.demo.agent.mesh.ConsumerAgentClient;
 import com.alibaba.dubbo.performance.demo.agent.registry.Endpoint;
 import com.alibaba.dubbo.performance.demo.agent.registry.EtcdRegistry;
 import com.alibaba.dubbo.performance.demo.agent.registry.IRegistry;
@@ -27,7 +26,7 @@ public class HelloController {
     private List<Endpoint> endpoints = null;
     private Object lock = new Object();
 //    private OkHttpClient httpClient = new OkHttpClient();
-    private RpcConsumerClient consumerClient = new RpcConsumerClient();
+    private ConsumerAgentClient consumerClient = new ConsumerAgentClient();
 
 
     @RequestMapping(value = "")

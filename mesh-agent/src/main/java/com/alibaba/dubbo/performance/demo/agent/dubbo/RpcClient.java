@@ -64,12 +64,9 @@ public class RpcClient {
         return result;
     }
 
-    public Object invoke(String invocation) throws Exception {
+    public Object invoke(RpcInvocation invocation) throws Exception {
         Channel channel = connectManager.getChannel();
-
         Request request = new Request();
-        request.setVersion("2.0.0");
-        request.setTwoWay(true);
         request.setData(invocation);
 
         logger.info("requestId=" + request.getId());

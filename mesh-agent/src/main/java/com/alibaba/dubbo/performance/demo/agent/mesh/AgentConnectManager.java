@@ -12,6 +12,9 @@ public class AgentConnectManager {
     private EventLoopGroup eventLoopGroup = new NioEventLoopGroup(4);
 
     private Bootstrap bootstrap;
+//    private Bootstrap bootstrap;
+//    private Bootstrap bootstrap;
+
 
     private Channel channel;
     private Object lock = new Object();
@@ -33,6 +36,7 @@ public class AgentConnectManager {
             synchronized (lock){
                 if (null == channel){
                     channel = bootstrap.connect(host, port).sync().channel();
+                    //
                 }
             }
         }

@@ -7,8 +7,13 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 
-public class RpcProviderServer {
+public class ProviderAgentServer {
     private final int port = Integer.valueOf(System.getProperty("agent.port"));
+    private static final int MAX_FRAME_LENGTH = 4 * 1027;
+    private static final int LENGTH_FIELD_LENGTH = 4;
+    private static final int LENGTH_FIELD_OFFSET = 0;
+    private static final int LENGTH_ADJUSTMENT = 0;
+    private static final int INITIAL_BYTES_TO_STRIP = 0;
     public void start() {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -20,8 +25,8 @@ public class RpcProviderServer {
                         @Override
                         public void initChannel(SocketChannel channel) throws Exception {
                             ChannelPipeline pipeline = channel.pipeline();
-                            pipeline.addLast(new CustomDecoder(1024*1024, 4, 0, 0,0, false));
-                            pipeline.addLast(new CustomEncoder());
+                            pipeline.addLast(new ProviderAgentDecoder(MAX_FRAME_LENGTH,LENGTH_FIELD_LENGTH,LENGTH_FIELD_OFFSET,LENGTH_ADJUSTMENT,INITIAL_BYTES_TO_STRIP,false));
+                            pipeline.addLast(new ProviderAgentEncoder());
                             pipeline.addLast(new AgentServerHandler());
                         }
                     });
