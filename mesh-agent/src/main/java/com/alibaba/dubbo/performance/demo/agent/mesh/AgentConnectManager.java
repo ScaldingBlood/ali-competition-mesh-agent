@@ -8,20 +8,21 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class AgentConnectManager {
     private EventLoopGroup eventLoopGroup = new NioEventLoopGroup(4);
 
     private Bootstrap bootstrap;
-//    private Bootstrap bootstrap;
-//    private Bootstrap bootstrap;
 
-
-    private Channel channel;
+    private Map<String, Channel> channelMap = new ConcurrentHashMap<>();
     private Object lock = new Object();
 
     public Channel getChannel(String host, int port) throws Exception {
-        if (null != channel) {
-            return channel;
+        if (null != channelMap.get(host)) {
+            return channelMap.get(host);
         }
 
         if (null == bootstrap) {
@@ -32,16 +33,15 @@ public class AgentConnectManager {
             }
         }
 
-        if (null == channel) {
+        if (null == channelMap.get(host)) {
             synchronized (lock){
-                if (null == channel){
-                    channel = bootstrap.connect(host, port).sync().channel();
-                    //
+                if (null == channelMap.get(host)){
+                    channelMap.put(host, bootstrap.connect(host, port).sync().channel());
                 }
             }
         }
 
-        return channel;
+        return channelMap.get(host);
     }
 
     private void initBootstrap() {

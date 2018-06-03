@@ -19,15 +19,16 @@ public class CustomerAgentEncoder extends MessageToByteEncoder<AgentRequest> {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try {
             ObjectOutputStream oos = new ObjectOutputStream(bos);
-            oos.writeObject(request);
+            oos.writeObject(request.getData());
             oos.flush();
-            bytes = bos.toByteArray ();
+            bytes = bos.toByteArray();
             oos.close();
             bos.close();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
         out.writeInt(bytes.length);
+        out.writeLong(request.getId());
         out.writeBytes(bytes);
     }
 }

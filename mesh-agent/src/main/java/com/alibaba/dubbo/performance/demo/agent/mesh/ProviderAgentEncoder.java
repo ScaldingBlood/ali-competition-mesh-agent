@@ -21,7 +21,7 @@ public class ProviderAgentEncoder extends MessageToByteEncoder<RpcResponse> {
 
         byte[] body = response.getBytes();
         out.writeInt(body.length);
-        out.writeBytes(response.getRequestId().getBytes());
+        out.writeLong(Long.valueOf(response.getRequestId()));
         out.writeBytes(body);
     }
 }

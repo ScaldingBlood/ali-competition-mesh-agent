@@ -1,47 +1,28 @@
 package com.alibaba.dubbo.performance.demo.agent.mesh;
 
 import com.alibaba.dubbo.performance.demo.agent.dubbo.model.Bytes;
-import com.alibaba.dubbo.performance.demo.agent.dubbo.model.RpcResponse;
 import com.alibaba.dubbo.performance.demo.agent.mesh.model.AgentRequest;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.ByteToMessageDecoder;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Arrays;
+import java.util.List;
 
-public class ProviderAgentDecoder extends LengthFieldBasedFrameDecoder {
-    private static final int HEADER_SIZE = 4;
-
-    private int len;
-
-    public ProviderAgentDecoder(int maxFrameLength, int lengthFieldOffset, int lengthFieldLength,
-                                int lengthAdjustment, int initialBytesToStrip, boolean failFast) {
-        super(maxFrameLength, lengthFieldOffset, lengthFieldLength,
-                lengthAdjustment, initialBytesToStrip, failFast);
-    }
+public class ProviderAgentDecoder extends ByteToMessageDecoder {
 
     @Override
-    protected Object decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
-        if (in == null) {
-            return null;
-        }
-        if (in.readableBytes() < HEADER_SIZE) {
-            throw new Exception();
-        }
+    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) {
+        byte[] data = new byte[byteBuf.readableBytes()];
+        byteBuf.readBytes(data);
 
-        len = in.readInt();
+        byte[] requestIdBytes = Arrays.copyOfRange(data,0,8);
+        long requestId = Bytes.bytes2long(requestIdBytes,0);
 
-        if (in.readableBytes() < len) {
-            throw new Exception();
-        }
-        ByteBuf buf = in.readBytes(len);
-        byte[] data = new byte[buf.readableBytes()];
-        buf.readBytes(data);
-
-        byte[] subArray = Arrays.copyOfRange(data,HEADER_SIZE, data.length);
+        byte[] subArray = Arrays.copyOfRange(data,8, data.length);
 
         Object request = null;
         try {
@@ -52,7 +33,12 @@ public class ProviderAgentDecoder extends LengthFieldBasedFrameDecoder {
             bis.close();
         } catch (IOException ex) {
             ex.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
-        return request;
+        AgentRequest agentRequest = new AgentRequest();
+        agentRequest.setId(requestId);
+        agentRequest.setData(request);
+        list.add(agentRequest);
     }
 }
