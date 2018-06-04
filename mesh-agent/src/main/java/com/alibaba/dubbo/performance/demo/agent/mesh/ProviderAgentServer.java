@@ -16,8 +16,8 @@ public class ProviderAgentServer {
     private static final int LENGTH_ADJUSTMENT = 8;
     private static final int INITIAL_BYTES_TO_STRIP = 4;
     public void start() {
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+        EventLoopGroup workerGroup = new NioEventLoopGroup(3);
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(bossGroup, workerGroup)

@@ -22,7 +22,13 @@ public class AgentConnectManager {
 
     public Channel getChannel(String host, int port) throws Exception {
         if (null != channelMap.get(host)) {
-            return channelMap.get(host);
+            Channel channel = channelMap.get(host);
+            if(!channel.isOpen()) {
+                channelMap.remove(host);
+            }
+//            if(!channel.isActive()) {
+//                channelMap.remove(host);
+//            }
         }
 
         if (null == bootstrap) {

@@ -5,6 +5,10 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.timeout.IdleStateHandler;
+import io.netty.handler.timeout.ReadTimeoutHandler;
+
+import java.util.concurrent.TimeUnit;
 
 public class AgentClientInitializer extends ChannelInitializer<SocketChannel> {
     private static final int MAX_FRAME_LENGTH = 1024 * 1024;
@@ -15,9 +19,11 @@ public class AgentClientInitializer extends ChannelInitializer<SocketChannel> {
     @Override
     protected void initChannel(SocketChannel socketChannel) {
         ChannelPipeline pipeline = socketChannel.pipeline();
+//        pipeline.addLast(new IdleStateHandler(5, 0, 0, TimeUnit.SECONDS));
         pipeline.addLast(new LengthFieldBasedFrameDecoder(MAX_FRAME_LENGTH,LENGTH_FIELD_OFFSET,LENGTH_FIELD_LENGTH,LENGTH_ADJUSTMENT,INITIAL_BYTES_TO_STRIP));
         pipeline.addLast(new CustomerAgentDecoder());
         pipeline.addLast(new CustomerAgentEncoder());
+        pipeline.addLast(new ReadTimeoutHandler(10));
         pipeline.addLast(new RpcClientHandler());
     }
 }
