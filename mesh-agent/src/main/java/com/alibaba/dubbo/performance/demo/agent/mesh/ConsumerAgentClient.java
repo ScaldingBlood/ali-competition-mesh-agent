@@ -31,13 +31,14 @@ public class ConsumerAgentClient {
         RpcRequestHolder.put(String.valueOf(agentRequest.getId()), rpcFuture);
 
         channel.writeAndFlush(agentRequest);
-
+//        System.out.println(System.currentTimeMillis());///////////////
         Object res = null;
         try {
             res = rpcFuture.get();
         } catch (Exception e) {
             e.printStackTrace();
         }
+//        System.out.println(System.currentTimeMillis());
         return res;
     }
 }

@@ -1,6 +1,7 @@
 package com.alibaba.dubbo.performance.demo.agent;
 
 import com.alibaba.dubbo.performance.demo.agent.dubbo.RpcClient;
+import com.alibaba.dubbo.performance.demo.agent.mesh.AgentConnectManager;
 import com.alibaba.dubbo.performance.demo.agent.mesh.ConsumerAgentClient;
 import com.alibaba.dubbo.performance.demo.agent.registry.Endpoint;
 import com.alibaba.dubbo.performance.demo.agent.registry.EtcdRegistry;
@@ -28,6 +29,28 @@ public class HelloController {
 //    private OkHttpClient httpClient = new OkHttpClient();
     private ConsumerAgentClient consumerClient = new ConsumerAgentClient();
 
+    private AgentConnectManager connectManager = new AgentConnectManager();
+
+
+    {
+        if (null == endpoints){
+            synchronized (lock){
+                if (null == endpoints){
+                    try {
+                        if(System.getProperty("type").equals("consumer")) {
+                            endpoints = registry.find("com.alibaba.dubbo.performance.demo.provider.IHelloService");
+                            for(Endpoint endpoint : endpoints) {
+                                connectManager.getChannel(endpoint.getHost(), endpoint.getPort());
+                                consumerClient.sendRequest(endpoint, "com.alibaba.dubbo.performance.demo.provider.IHelloService", "hash", "Ljava/lang/String;", "s");
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
 
     @RequestMapping(value = "")
     public Object invoke(@RequestParam("interface") String interfaceName,
@@ -35,7 +58,7 @@ public class HelloController {
                          @RequestParam("parameterTypesString") String parameterTypesString,
                          @RequestParam("parameter") String parameter) throws Exception {
         String type = System.getProperty("type");   // 获取type参数
-        if ("consumer".equals(type)){
+         if ("consumer".equals(type)){
             return consumer(interfaceName,method,parameterTypesString,parameter);
         }
         // should start netty before
@@ -53,15 +76,6 @@ public class HelloController {
 //    }
 
     public Integer consumer(String interfaceName,String method,String parameterTypesString,String parameter) throws Exception {
-
-        if (null == endpoints){
-            synchronized (lock){
-                if (null == endpoints){
-                    endpoints = registry.find("com.alibaba.dubbo.performance.demo.provider.IHelloService");
-                }
-            }
-        }
-
         // 简单的负载均衡，随机取一个
         Endpoint endpoint = endpoints.get(random.nextInt(endpoints.size()));
 

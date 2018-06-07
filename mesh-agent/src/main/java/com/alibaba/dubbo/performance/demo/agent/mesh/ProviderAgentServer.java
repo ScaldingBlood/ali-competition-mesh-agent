@@ -7,6 +7,8 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 
+import java.util.concurrent.ThreadPoolExecutor;
+
 
 public class ProviderAgentServer {
     private final int port = Integer.valueOf(System.getProperty("agent.port"));
@@ -15,9 +17,23 @@ public class ProviderAgentServer {
     private static final int LENGTH_FIELD_OFFSET = 0;
     private static final int LENGTH_ADJUSTMENT = 8;
     private static final int INITIAL_BYTES_TO_STRIP = 4;
+
+    private static ThreadPoolExecutor threadPoolExecutor;
+
+    public static void submit(Runnable task) {
+        if (threadPoolExecutor == null) {
+            synchronized (ProviderAgentServer.class) {
+                if (threadPoolExecutor == null) {
+                    threadPoolExecutor = (ThreadPoolExecutor) RpcThreadPool.getExecutor(16, -1);
+                }
+            }
+        }
+        threadPoolExecutor.submit(task);
+    }
+
     public void start() {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-        EventLoopGroup workerGroup = new NioEventLoopGroup(3);
+        EventLoopGroup workerGroup = new NioEventLoopGroup(7);
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(bossGroup, workerGroup)
