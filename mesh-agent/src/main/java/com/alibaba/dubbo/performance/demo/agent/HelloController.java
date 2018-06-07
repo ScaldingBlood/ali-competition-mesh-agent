@@ -1,7 +1,6 @@
 package com.alibaba.dubbo.performance.demo.agent;
 
 import com.alibaba.dubbo.performance.demo.agent.dubbo.RpcClient;
-import com.alibaba.dubbo.performance.demo.agent.dubbo.model.RpcFuture;
 import com.alibaba.dubbo.performance.demo.agent.mesh.ConsumerAgentClient;
 import com.alibaba.dubbo.performance.demo.agent.registry.Endpoint;
 import com.alibaba.dubbo.performance.demo.agent.registry.EtcdRegistry;
@@ -67,13 +66,7 @@ public class HelloController {
         Endpoint endpoint = endpoints.get(random.nextInt(endpoints.size()));
 
         //netty consumer client send request
-        RpcFuture future = (RpcFuture)consumerClient.sendRequest(endpoint, interfaceName, method, parameterTypesString, parameter);
-        byte[] bytes = null;
-        try {
-             bytes = (byte[]) future.get();
-        } catch(Exception ex) {
-            ex.printStackTrace();
-        }
+        byte[] bytes = (byte[])consumerClient.sendRequest(endpoint, interfaceName, method, parameterTypesString, parameter);
         return Integer.valueOf(new String(bytes));
 //        String url =  "http://" + endpoint.getHost() + ":" + endpoint.getPort();
 //

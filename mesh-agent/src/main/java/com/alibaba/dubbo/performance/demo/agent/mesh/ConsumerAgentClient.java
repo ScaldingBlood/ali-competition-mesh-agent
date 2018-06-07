@@ -32,6 +32,12 @@ public class ConsumerAgentClient {
 
         channel.writeAndFlush(agentRequest);
 
-        return rpcFuture;
+        Object res = null;
+        try {
+            res = rpcFuture.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return res;
     }
 }
