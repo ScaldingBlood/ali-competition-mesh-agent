@@ -16,19 +16,23 @@ public class AgentServerHandler extends SimpleChannelInboundHandler<AgentRequest
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, AgentRequest request) {
+//        System.out.println(System.currentTimeMillis() + "hello");//////////////
         String requestId = String.valueOf(request.getId());
         RpcFuture future = new RpcFuture();
         RpcRequestHolder.put(requestId, future);
-        byte[] res = null;
-        try {
-            res = (byte[])rpcClient.invoke((RpcInvocation) request.getData());
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        RpcResponse response = new RpcResponse();
-        response.setBytes(res);
-        response.setRequestId(String.valueOf(request.getId()));
 
-        channelHandlerContext.writeAndFlush(response);
+        RpcResponse response = new RpcResponse();
+        response.setRequestId(String.valueOf(request.getId()));
+        ProviderAgentServer.submit(new DubboTask(channelHandlerContext, request, response, rpcClient));
+//        try {
+//            res = (byte[])rpcClient.invoke((RpcInvocation) request.getData());
+//        } catch(Exception e) {
+//            e.printStackTrace();
+//        }
+//        RpcResponse response = new RpcResponse();
+//        response.setBytes(res);
+//        response.setRequestId(String.valueOf(request.getId()));
+//
+//        channelHandlerContext.writeAndFlush(response);
     }
 }
