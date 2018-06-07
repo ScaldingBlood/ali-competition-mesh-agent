@@ -20,18 +20,20 @@ public class ProviderAgentServer {
 
     private static ThreadPoolExecutor threadPoolExecutor;
 
+
     public static void submit(Runnable task) {
-        if (threadPoolExecutor == null) {
-            synchronized (ProviderAgentServer.class) {
-                if (threadPoolExecutor == null) {
-                    threadPoolExecutor = (ThreadPoolExecutor) RpcThreadPool.getExecutor(16, -1);
-                }
-            }
-        }
         threadPoolExecutor.submit(task);
     }
 
     public void start() {
+        if (threadPoolExecutor == null) {
+            synchronized (ProviderAgentServer.class) {
+                if (threadPoolExecutor == null) {
+                    threadPoolExecutor = (ThreadPoolExecutor) RpcThreadPool.getExecutor(24, -1);
+                }
+            }
+        }
+
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup(7);
         try {

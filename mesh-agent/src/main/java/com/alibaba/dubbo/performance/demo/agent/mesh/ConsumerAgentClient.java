@@ -38,7 +38,6 @@ public class ConsumerAgentClient {
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        System.out.println(System.currentTimeMillis());
         return res;
     }
 }

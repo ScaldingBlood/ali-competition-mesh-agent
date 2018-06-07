@@ -17,5 +17,6 @@ public class ProviderAgentEncoder extends MessageToByteEncoder<RpcResponse> {
         out.writeInt(body.length);
         out.writeLong(Long.valueOf(response.getRequestId()));
         out.writeBytes(body);
+        System.out.println(System.currentTimeMillis() + "after");
     }
 }

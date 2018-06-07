@@ -81,6 +81,7 @@ public class HelloController {
 
         //netty consumer client send request
         byte[] bytes = (byte[])consumerClient.sendRequest(endpoint, interfaceName, method, parameterTypesString, parameter);
+//        System.out.println(System.currentTimeMillis() + "after");
         return Integer.valueOf(new String(bytes));
 //        String url =  "http://" + endpoint.getHost() + ":" + endpoint.getPort();
 //
