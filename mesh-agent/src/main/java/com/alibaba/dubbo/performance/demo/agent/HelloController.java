@@ -1,6 +1,8 @@
 package com.alibaba.dubbo.performance.demo.agent;
 
 import com.alibaba.dubbo.performance.demo.agent.dubbo.RpcClient;
+import com.alibaba.dubbo.performance.demo.agent.dubbo.model.RpcFuture;
+import com.alibaba.dubbo.performance.demo.agent.dubbo.model.RpcRequestHolder;
 import com.alibaba.dubbo.performance.demo.agent.mesh.AgentConnectManager;
 import com.alibaba.dubbo.performance.demo.agent.mesh.ConsumerAgentClient;
 import com.alibaba.dubbo.performance.demo.agent.registry.Endpoint;
@@ -8,12 +10,15 @@ import com.alibaba.dubbo.performance.demo.agent.registry.EtcdRegistry;
 import com.alibaba.dubbo.performance.demo.agent.registry.IRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Callable;
 
 @RestController
 public class HelloController {
@@ -75,14 +80,17 @@ public class HelloController {
 //        return (byte[]) result;
 //    }
 
-    public Integer consumer(String interfaceName,String method,String parameterTypesString,String parameter) throws Exception {
+    public Callable<Integer> consumer(String interfaceName, String method, String parameterTypesString, String parameter) throws Exception {
         // 简单的负载均衡，随机取一个
         Endpoint endpoint = endpoints.get(random.nextInt(endpoints.size()));
 
         //netty consumer client send request
-        byte[] bytes = (byte[])consumerClient.sendRequest(endpoint, interfaceName, method, parameterTypesString, parameter);
+        String id = consumerClient.sendRequest(endpoint, interfaceName, method, parameterTypesString, parameter);
+        RpcFuture future = RpcRequestHolder.get(id);
+
+        Callable<Integer> callback = () -> Integer.valueOf(new String((byte[])future.get()));
 //        System.out.println(System.currentTimeMillis() + "after");
-        return Integer.valueOf(new String(bytes));
+        return callback;
 //        String url =  "http://" + endpoint.getHost() + ":" + endpoint.getPort();
 //
 //        RequestBody requestBody = new FormBody.Builder()

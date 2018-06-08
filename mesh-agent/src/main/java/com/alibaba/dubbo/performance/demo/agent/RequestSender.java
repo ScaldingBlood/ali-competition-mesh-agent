@@ -17,7 +17,7 @@ public class RequestSender {
 
         org.asynchttpclient.Request request = org.asynchttpclient.Dsl.get(url).build();
         long now = System.currentTimeMillis();
-        for(int i = 0; i < 1; i++) {
+        for(int i = 0; i < 1000; i++) {
             ListenableFuture<Response> responseFuture = asyncHttpClient.executeRequest(request);
             Runnable callback = () -> {
                 try {

@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 public class ConsumerAgentClient {
     private AgentConnectManager connectManager = new AgentConnectManager();
 
-    public Object sendRequest(Endpoint endpoint, String interfaceName, String method, String parameterTypesString, String parameter) throws Exception {
+    public String sendRequest(Endpoint endpoint, String interfaceName, String method, String parameterTypesString, String parameter) throws Exception {
         Channel channel = connectManager.getChannel(endpoint.getHost(), endpoint.getPort());
         RpcInvocation invocation = new RpcInvocation();
         invocation.setMethodName(method);
@@ -28,16 +28,18 @@ public class ConsumerAgentClient {
         agentRequest.setData(invocation);
 
         RpcFuture rpcFuture = new RpcFuture();
-        RpcRequestHolder.put(String.valueOf(agentRequest.getId()), rpcFuture);
+        String id = String.valueOf(agentRequest.getId());
+        RpcRequestHolder.put(id, rpcFuture);
 
         channel.writeAndFlush(agentRequest);
 //        System.out.println(System.currentTimeMillis());///////////////
-        Object res = null;
-        try {
-            res = rpcFuture.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return res;
+        return id;
+//        Object res = null;
+//        try {
+//            res = rpcFuture.get();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return res;
     }
 }
