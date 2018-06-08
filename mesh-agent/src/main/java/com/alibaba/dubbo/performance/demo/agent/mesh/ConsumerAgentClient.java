@@ -27,9 +27,9 @@ public class ConsumerAgentClient {
         AgentRequest agentRequest = new AgentRequest();
         agentRequest.setData(invocation);
 
-        RpcFuture rpcFuture = new RpcFuture();
+//        RpcFuture rpcFuture = new RpcFuture();
         String id = String.valueOf(agentRequest.getId());
-        RpcRequestHolder.put(id, rpcFuture);
+//        RpcRequestHolder.put(id, rpcFuture);
 
         channel.writeAndFlush(agentRequest);
 //        System.out.println(System.currentTimeMillis());///////////////

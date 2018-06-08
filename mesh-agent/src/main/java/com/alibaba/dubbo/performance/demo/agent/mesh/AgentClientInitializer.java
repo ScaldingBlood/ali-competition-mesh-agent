@@ -24,6 +24,6 @@ public class AgentClientInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(new CustomerAgentDecoder());
         pipeline.addLast(new CustomerAgentEncoder());
         pipeline.addLast(new ReadTimeoutHandler(10));
-        pipeline.addLast(new RpcClientHandler());
+        pipeline.addLast(new AgentClientHandler());
     }
 }

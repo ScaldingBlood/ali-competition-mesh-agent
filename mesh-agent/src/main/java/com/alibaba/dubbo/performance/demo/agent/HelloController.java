@@ -5,6 +5,7 @@ import com.alibaba.dubbo.performance.demo.agent.dubbo.model.RpcFuture;
 import com.alibaba.dubbo.performance.demo.agent.dubbo.model.RpcRequestHolder;
 import com.alibaba.dubbo.performance.demo.agent.mesh.AgentConnectManager;
 import com.alibaba.dubbo.performance.demo.agent.mesh.ConsumerAgentClient;
+import com.alibaba.dubbo.performance.demo.agent.mesh.model.DeferredResponseHolder;
 import com.alibaba.dubbo.performance.demo.agent.registry.Endpoint;
 import com.alibaba.dubbo.performance.demo.agent.registry.EtcdRegistry;
 import com.alibaba.dubbo.performance.demo.agent.registry.IRegistry;
@@ -19,6 +20,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 public class HelloController {
@@ -35,7 +37,7 @@ public class HelloController {
     private ConsumerAgentClient consumerClient = new ConsumerAgentClient();
 
     private AgentConnectManager connectManager = new AgentConnectManager();
-
+    private ConcurrentHashMap<String, Integer> resMap = new ConcurrentHashMap<>();
 
     {
         if (null == endpoints){
@@ -46,7 +48,7 @@ public class HelloController {
                             endpoints = registry.find("com.alibaba.dubbo.performance.demo.provider.IHelloService");
                             for(Endpoint endpoint : endpoints) {
                                 connectManager.getChannel(endpoint.getHost(), endpoint.getPort());
-                                consumerClient.sendRequest(endpoint, "com.alibaba.dubbo.performance.demo.provider.IHelloService", "hash", "Ljava/lang/String;", "s");
+//                                consumerClient.sendRequest(endpoint, "com.alibaba.dubbo.performance.demo.provider.IHelloService", "hash", "Ljava/lang/String;", "s");
                             }
                         }
                     } catch (Exception e) {
@@ -80,17 +82,19 @@ public class HelloController {
 //        return (byte[]) result;
 //    }
 
-    public Callable<Integer> consumer(String interfaceName, String method, String parameterTypesString, String parameter) throws Exception {
+    public DeferredResult<Integer> consumer(String interfaceName, String method, String parameterTypesString, String parameter) throws Exception {
         // 简单的负载均衡，随机取一个
         Endpoint endpoint = endpoints.get(random.nextInt(endpoints.size()));
 
         //netty consumer client send request
         String id = consumerClient.sendRequest(endpoint, interfaceName, method, parameterTypesString, parameter);
-        RpcFuture future = RpcRequestHolder.get(id);
-
-        Callable<Integer> callback = () -> Integer.valueOf(new String((byte[])future.get()));
+//        RpcFuture future = RpcRequestHolder.get(id);
+        DeferredResult<Integer> result = new DeferredResult<>();
+        DeferredResponseHolder.resMap.put(id, result);
+//        Callable<Integer> callback = () -> Integer.valueOf(new String((byte[])future.get()));
 //        System.out.println(System.currentTimeMillis() + "after");
-        return callback;
+        return result;
+
 //        String url =  "http://" + endpoint.getHost() + ":" + endpoint.getPort();
 //
 //        RequestBody requestBody = new FormBody.Builder()
