@@ -4,5 +4,6 @@ import io.netty.channel.Channel;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ChannelHolder {
-    public static ConcurrentHashMap<String, Channel> channleMap = new ConcurrentHashMap<>();
+//    public static ConcurrentHashMap<String, Channel> channelMap = new ConcurrentHashMap<>();
+    public static Channel channel;
 }

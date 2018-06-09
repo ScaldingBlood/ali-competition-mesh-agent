@@ -8,22 +8,15 @@ import io.netty.channel.ChannelHandlerContext;
 import org.springframework.web.context.request.async.DeferredResult;
 
 public class DubboTask implements Runnable {
-    private ChannelHandlerContext ctx;
     private AgentRequest request;
-    private RpcResponse response;
     private RpcClient client;
-    public DubboTask(ChannelHandlerContext ctx, AgentRequest request, RpcResponse response, RpcClient client) {
-        this.ctx = ctx;
+    public DubboTask(AgentRequest request, RpcClient client) {
         this.request = request;
-        this.response = response;
         this.client = client;
     }
     public void run() {
         try {
-//            System.out.println(System.currentTimeMillis());
-//            DeferredResult<Integer> result = client.invoke((RpcInvocation) request.getData());
-            ctx.writeAndFlush(response);
-//            System.out.println(System.currentTimeMillis());
+            client.invoke((RpcInvocation) request.getData(), request.getId());
         } catch (Exception e) {
             e.printStackTrace();
         }

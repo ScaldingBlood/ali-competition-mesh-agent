@@ -21,11 +21,11 @@ public class AgentServerHandler extends SimpleChannelInboundHandler<AgentRequest
 //        System.out.println(System.currentTimeMillis() + "hello");//////////////
         long requestId = request.getId();
         Channel channel = channelHandlerContext.channel();
-        ChannelHolder.channleMap.put(String.valueOf(requestId), channel);
+//        ChannelHolder.channelMap.put(String.valueOf(requestId), channel);
+        if(ChannelHolder.channel == null || !ChannelHolder.channel.isActive())
+            ChannelHolder.channel = channelHandlerContext.channel();
         rpcClient.invoke((RpcInvocation) request.getData(), requestId);
-
-
-//        ProviderAgentServer.submit(new DubboTask(channelHandlerContext, request, response, rpcClient));
+//        ProviderAgentServer.submit(new DubboTask(request, rpcClient));
 //        try {
 //            res = (byte[])rpcClient.invoke((RpcInvocation) request.getData());
 //        } catch(Exception e) {
