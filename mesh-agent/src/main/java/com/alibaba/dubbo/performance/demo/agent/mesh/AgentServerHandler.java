@@ -3,6 +3,8 @@ package com.alibaba.dubbo.performance.demo.agent.mesh;
 import com.alibaba.dubbo.performance.demo.agent.dubbo.RpcClient;
 import com.alibaba.dubbo.performance.demo.agent.dubbo.model.*;
 import com.alibaba.dubbo.performance.demo.agent.mesh.model.AgentRequest;
+import com.alibaba.dubbo.performance.demo.agent.mesh.model.ChannelHolder;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -15,15 +17,15 @@ public class AgentServerHandler extends SimpleChannelInboundHandler<AgentRequest
 //    }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, AgentRequest request) {
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, AgentRequest request) throws  Exception {
 //        System.out.println(System.currentTimeMillis() + "hello");//////////////
-        String requestId = String.valueOf(request.getId());
-        RpcFuture future = new RpcFuture();
-        RpcRequestHolder.put(requestId, future);
+        long requestId = request.getId();
+        Channel channel = channelHandlerContext.channel();
+        ChannelHolder.channleMap.put(String.valueOf(requestId), channel);
+        rpcClient.invoke((RpcInvocation) request.getData(), requestId);
 
-        RpcResponse response = new RpcResponse();
-        response.setRequestId(String.valueOf(request.getId()));
-        ProviderAgentServer.submit(new DubboTask(channelHandlerContext, request, response, rpcClient));
+
+//        ProviderAgentServer.submit(new DubboTask(channelHandlerContext, request, response, rpcClient));
 //        try {
 //            res = (byte[])rpcClient.invoke((RpcInvocation) request.getData());
 //        } catch(Exception e) {
