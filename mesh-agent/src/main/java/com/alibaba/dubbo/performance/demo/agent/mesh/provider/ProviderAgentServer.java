@@ -1,13 +1,13 @@
 package com.alibaba.dubbo.performance.demo.agent.mesh;
 
+import com.alibaba.dubbo.performance.demo.agent.mesh.provider.ProviderAgentDecoder;
+import com.alibaba.dubbo.performance.demo.agent.mesh.provider.ProviderAgentEncoder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-
-import java.util.concurrent.ThreadPoolExecutor;
 
 
 public class ProviderAgentServer {
@@ -18,22 +18,8 @@ public class ProviderAgentServer {
     private static final int LENGTH_ADJUSTMENT = 8;
     private static final int INITIAL_BYTES_TO_STRIP = 4;
 
-    private static ThreadPoolExecutor threadPoolExecutor;
-
-
-    public static void submit(Runnable task) {
-        threadPoolExecutor.submit(task);
-    }
 
     public void start() {
-        if (threadPoolExecutor == null) {
-            synchronized (ProviderAgentServer.class) {
-                if (threadPoolExecutor == null) {
-                    threadPoolExecutor = (ThreadPoolExecutor) RpcThreadPool.getExecutor(24, -1);
-                }
-            }
-        }
-
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup(7);
         try {

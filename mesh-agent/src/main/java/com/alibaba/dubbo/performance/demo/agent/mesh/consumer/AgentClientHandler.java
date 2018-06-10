@@ -1,4 +1,4 @@
-package com.alibaba.dubbo.performance.demo.agent.mesh;
+package com.alibaba.dubbo.performance.demo.agent.mesh.provider;
 
 import com.alibaba.dubbo.performance.demo.agent.dubbo.model.RpcResponse;
 import com.alibaba.dubbo.performance.demo.agent.mesh.model.DeferredResponseHolder;

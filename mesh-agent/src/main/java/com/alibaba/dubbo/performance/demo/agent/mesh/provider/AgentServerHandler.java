@@ -11,11 +11,6 @@ import io.netty.channel.SimpleChannelInboundHandler;
 public class AgentServerHandler extends SimpleChannelInboundHandler<AgentRequest> {
     private RpcClient rpcClient = new RpcClient();
 
-//    @Override
-//    public void channelActive(final ChannelHandlerContext ctx) {
-//
-//    }
-
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, AgentRequest request) throws  Exception {
 //        System.out.println(System.currentTimeMillis() + "hello");//////////////
@@ -25,16 +20,5 @@ public class AgentServerHandler extends SimpleChannelInboundHandler<AgentRequest
         if(ChannelHolder.channel == null || !ChannelHolder.channel.isActive())
             ChannelHolder.channel = channelHandlerContext.channel();
         rpcClient.invoke((RpcInvocation) request.getData(), requestId);
-//        ProviderAgentServer.submit(new DubboTask(request, rpcClient));
-//        try {
-//            res = (byte[])rpcClient.invoke((RpcInvocation) request.getData());
-//        } catch(Exception e) {
-//            e.printStackTrace();
-//        }
-//        RpcResponse response = new RpcResponse();
-//        response.setBytes(res);
-//        response.setRequestId(String.valueOf(request.getId()));
-//
-//        channelHandlerContext.writeAndFlush(response);
     }
 }
