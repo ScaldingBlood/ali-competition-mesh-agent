@@ -1,6 +1,7 @@
-package com.alibaba.dubbo.performance.demo.agent.mesh;
+package com.alibaba.dubbo.performance.demo.agent.mesh.consumer;
 
 import com.alibaba.dubbo.performance.demo.agent.dubbo.model.*;
+import com.alibaba.dubbo.performance.demo.agent.mesh.provider.AgentConnectManager;
 import com.alibaba.dubbo.performance.demo.agent.mesh.model.AgentRequest;
 import com.alibaba.dubbo.performance.demo.agent.registry.Endpoint;
 import io.netty.channel.Channel;
@@ -27,19 +28,10 @@ public class ConsumerAgentClient {
         AgentRequest agentRequest = new AgentRequest();
         agentRequest.setData(invocation);
 
-//        RpcFuture rpcFuture = new RpcFuture();
         String id = String.valueOf(agentRequest.getId());
-//        RpcRequestHolder.put(id, rpcFuture);
 
         channel.writeAndFlush(agentRequest);
 //        System.out.println(System.currentTimeMillis());///////////////
         return id;
-//        Object res = null;
-//        try {
-//            res = rpcFuture.get();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return res;
     }
 }

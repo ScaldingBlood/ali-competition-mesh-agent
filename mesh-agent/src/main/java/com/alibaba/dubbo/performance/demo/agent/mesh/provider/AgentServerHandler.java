@@ -1,4 +1,4 @@
-package com.alibaba.dubbo.performance.demo.agent.mesh;
+package com.alibaba.dubbo.performance.demo.agent.mesh.provider;
 
 import com.alibaba.dubbo.performance.demo.agent.dubbo.RpcClient;
 import com.alibaba.dubbo.performance.demo.agent.dubbo.model.*;
@@ -9,13 +9,16 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 public class AgentServerHandler extends SimpleChannelInboundHandler<AgentRequest> {
-    private RpcClient rpcClient = new RpcClient();
+    private RpcClient rpcClient;
+
+    public AgentServerHandler(RpcClient client) {
+        this.rpcClient = client;
+    }
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, AgentRequest request) throws  Exception {
 //        System.out.println(System.currentTimeMillis() + "hello");//////////////
         long requestId = request.getId();
-        Channel channel = channelHandlerContext.channel();
 //        ChannelHolder.channelMap.put(String.valueOf(requestId), channel);
         if(ChannelHolder.channel == null || !ChannelHolder.channel.isActive())
             ChannelHolder.channel = channelHandlerContext.channel();

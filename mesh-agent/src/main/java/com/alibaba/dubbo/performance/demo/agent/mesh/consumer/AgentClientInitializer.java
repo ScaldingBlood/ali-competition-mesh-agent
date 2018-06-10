@@ -1,14 +1,10 @@
-package com.alibaba.dubbo.performance.demo.agent.mesh;
+package com.alibaba.dubbo.performance.demo.agent.mesh.consumer;
 
-import com.alibaba.dubbo.performance.demo.agent.dubbo.RpcClientHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.handler.timeout.ReadTimeoutHandler;
-
-import java.util.concurrent.TimeUnit;
 
 public class AgentClientInitializer extends ChannelInitializer<SocketChannel> {
     private static final int MAX_FRAME_LENGTH = 1024 * 1024;
