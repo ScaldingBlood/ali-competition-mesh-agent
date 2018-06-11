@@ -2,8 +2,10 @@ package com.alibaba.dubbo.performance.demo.agent.mesh.consumer;
 
 import com.alibaba.dubbo.performance.demo.agent.dubbo.model.RpcResponse;
 import com.alibaba.dubbo.performance.demo.agent.mesh.model.ChannelHolder;
+import com.alibaba.dubbo.performance.demo.agent.mesh.model.DeferredResponseHolder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
@@ -24,5 +26,7 @@ public class AgentClientHandler extends SimpleChannelInboundHandler<RpcResponse>
         resp.headers().set(CONTENT_LENGTH, buf.readableBytes());
         ChannelHolder.channelMap.get(requestId).writeAndFlush(resp);
         ChannelHolder.channelMap.remove(requestId);
+//        DeferredResponseHolder.resMap.get(requestId).setResult(Integer.valueOf(new String(response.getBytes())));
+//        DeferredResponseHolder.resMap.remove(requestId);
     }
 }
