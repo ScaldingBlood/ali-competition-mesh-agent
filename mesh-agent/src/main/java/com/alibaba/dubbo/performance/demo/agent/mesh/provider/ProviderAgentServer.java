@@ -36,7 +36,7 @@ public class ProviderAgentServer {
                             ChannelPipeline pipeline = channel.pipeline();
                             pipeline.addLast(new LengthFieldBasedFrameDecoder(MAX_FRAME_LENGTH,LENGTH_FIELD_OFFSET,LENGTH_FIELD_LENGTH,LENGTH_ADJUSTMENT,INITIAL_BYTES_TO_STRIP));
                             pipeline.addLast(new ProviderAgentDecoder());
-                            pipeline.addLast(new ProviderAgentEncoder());
+//                            pipeline.addLast(new ProviderAgentEncoder());
                             pipeline.addLast(new AgentServerHandler(rpcClient));
                         }
                     });

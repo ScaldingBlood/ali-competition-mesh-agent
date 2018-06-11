@@ -1,17 +1,14 @@
 package com.alibaba.dubbo.performance.demo.agent.dubbo;
 
-import com.alibaba.dubbo.performance.demo.agent.dubbo.model.RpcResponse;
 
 import com.alibaba.dubbo.performance.demo.agent.mesh.model.ChannelHolder;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 
-public class RpcClientHandler extends SimpleChannelInboundHandler<RpcResponse> {
+public class RpcClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcResponse response) {
-//        ChannelHolder.channelMap.get(response.getRequestId()).writeAndFlush(response);
-//        ChannelHolder.channelMap.remove(response.getRequestId());
-        ChannelHolder.channel.writeAndFlush(response);
+    public void channelRead(ChannelHandlerContext channelHandlerContext, Object dubboResp) {
+        ChannelHolder.channel.writeAndFlush(dubboResp);
     }
 }
