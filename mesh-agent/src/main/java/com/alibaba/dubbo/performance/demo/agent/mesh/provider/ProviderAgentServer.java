@@ -15,7 +15,7 @@ public class ProviderAgentServer {
     private IRegistry registry = new EtcdRegistry(System.getProperty("etcd.url"));
 
     private final int port = Integer.valueOf(System.getProperty("server.port"));
-    private static final int MAX_FRAME_LENGTH = 1024 * 1024;
+    private static final int MAX_FRAME_LENGTH = 1024 * 4;
     private static final int LENGTH_FIELD_LENGTH = 4;
     private static final int LENGTH_FIELD_OFFSET = 0;
     private static final int LENGTH_ADJUSTMENT = 8;

@@ -7,7 +7,7 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 
 public class AgentClientInitializer extends ChannelInitializer<SocketChannel> {
-    private static final int MAX_FRAME_LENGTH = 1024 * 1024;
+    private static final int MAX_FRAME_LENGTH = 1024 * 4;
     private static final int LENGTH_FIELD_LENGTH = 4;
     private static final int LENGTH_FIELD_OFFSET = 0;
     private static final int LENGTH_ADJUSTMENT = 8;
