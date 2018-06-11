@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class AgentConnectManager {
-    private EventLoopGroup eventLoopGroup = new NioEventLoopGroup(8);
+    private EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
 
     private Bootstrap bootstrap;
 

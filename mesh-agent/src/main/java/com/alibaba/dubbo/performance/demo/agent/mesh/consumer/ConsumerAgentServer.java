@@ -15,6 +15,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.handler.codec.http.HttpServerKeepAliveHandler;
 
 import java.util.List;
 import java.util.Random;
@@ -31,7 +32,7 @@ public class ConsumerAgentServer {
 
     public void start() {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-        EventLoopGroup workerGroup = new NioEventLoopGroup(7);
+        EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(bossGroup, workerGroup)
@@ -40,6 +41,7 @@ public class ConsumerAgentServer {
                         public void initChannel(SocketChannel channel) throws Exception {
                             ChannelPipeline pipeline = channel.pipeline();
                             pipeline.addLast(new HttpServerCodec());
+                            pipeline.addLast(new HttpServerKeepAliveHandler());
                             pipeline.addLast(new HttpObjectAggregator(1024 * 4));
                             pipeline.addLast(new HttpClientCodec());
                             pipeline.addLast(new HttpConsumerHandler(endpoints.get(random.nextInt(endpoints.size())), consumerAgentClient));
