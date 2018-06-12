@@ -20,7 +20,7 @@ public class AgentClientHandler extends SimpleChannelInboundHandler<RpcResponse>
         FullHttpResponse resp = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, buf);
         resp.headers().set(CONTENT_TYPE, "text/plain; charset=UTF-8");
         resp.headers().set(CONTENT_LENGTH, buf.readableBytes());
-        resp.headers().set(CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
+//        resp.headers().set(CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
         ChannelHolder.channelMap.get(requestId).writeAndFlush(resp);
         ChannelHolder.channelMap.remove(requestId);
     }

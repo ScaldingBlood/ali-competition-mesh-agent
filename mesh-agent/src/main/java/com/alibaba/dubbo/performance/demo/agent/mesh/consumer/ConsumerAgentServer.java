@@ -41,7 +41,7 @@ public class ConsumerAgentServer {
                         public void initChannel(SocketChannel channel) throws Exception {
                             ChannelPipeline pipeline = channel.pipeline();
                             pipeline.addLast(new HttpServerCodec());
-                            pipeline.addLast(new HttpServerKeepAliveHandler());
+//                            pipeline.addLast(new HttpServerKeepAliveHandler());
                             pipeline.addLast(new HttpObjectAggregator(1024 * 4));
                             pipeline.addLast(new HttpClientCodec());
                             pipeline.addLast(new HttpConsumerHandler(endpoints.get(random.nextInt(endpoints.size())), consumerAgentClient));
