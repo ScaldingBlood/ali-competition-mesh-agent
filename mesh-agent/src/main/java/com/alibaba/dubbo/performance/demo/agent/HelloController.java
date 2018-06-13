@@ -1,7 +1,7 @@
 //package com.alibaba.dubbo.performance.demo.agent;
 //
-//import com.alibaba.dubbo.performance.demo.agent.mesh.provider.AgentConnectManager;
-//import com.alibaba.dubbo.performance.demo.agent.mesh.consumer.ConsumerAgentClient;
+//import com.alibaba.dubbo.performance.demo.agent.mesh.consumer.http.AgentConnectManager;
+//import com.alibaba.dubbo.performance.demo.agent.mesh.consumer.http.ConsumerAgentClient;
 //import com.alibaba.dubbo.performance.demo.agent.mesh.model.DeferredResponseHolder;
 //import com.alibaba.dubbo.performance.demo.agent.registry.Endpoint;
 //import com.alibaba.dubbo.performance.demo.agent.registry.EtcdRegistry;

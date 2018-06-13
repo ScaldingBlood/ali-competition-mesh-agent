@@ -1,4 +1,4 @@
-package com.alibaba.dubbo.performance.demo.agent.mesh.consumer;
+package com.alibaba.dubbo.performance.demo.agent.mesh.consumer.agent;
 
 import com.alibaba.dubbo.performance.demo.agent.dubbo.model.Bytes;
 import com.alibaba.dubbo.performance.demo.agent.dubbo.model.RpcResponse;

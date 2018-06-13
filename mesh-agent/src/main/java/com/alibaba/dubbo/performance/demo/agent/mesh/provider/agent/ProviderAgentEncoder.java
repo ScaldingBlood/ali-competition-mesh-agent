@@ -1,4 +1,4 @@
-package com.alibaba.dubbo.performance.demo.agent.mesh.provider;
+package com.alibaba.dubbo.performance.demo.agent.mesh.provider.agent;
 
 import com.alibaba.dubbo.performance.demo.agent.dubbo.model.*;
 

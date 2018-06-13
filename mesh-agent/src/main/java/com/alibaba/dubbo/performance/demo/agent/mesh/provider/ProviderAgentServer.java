@@ -1,6 +1,9 @@
 package com.alibaba.dubbo.performance.demo.agent.mesh.provider;
 
 import com.alibaba.dubbo.performance.demo.agent.dubbo.RpcClient;
+import com.alibaba.dubbo.performance.demo.agent.mesh.provider.agent.AgentServerHandler;
+import com.alibaba.dubbo.performance.demo.agent.mesh.provider.agent.ProviderAgentDecoder;
+import com.alibaba.dubbo.performance.demo.agent.mesh.provider.agent.ProviderAgentEncoder;
 import com.alibaba.dubbo.performance.demo.agent.registry.EtcdRegistry;
 import com.alibaba.dubbo.performance.demo.agent.registry.IRegistry;
 import io.netty.bootstrap.ServerBootstrap;
@@ -25,7 +28,7 @@ public class ProviderAgentServer {
 
     public void start() {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        EventLoopGroup workerGroup = new NioEventLoopGroup(7);
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(bossGroup, workerGroup)

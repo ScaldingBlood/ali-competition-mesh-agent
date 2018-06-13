@@ -1,18 +1,27 @@
-package com.alibaba.dubbo.performance.demo.agent.mesh.consumer;
+package com.alibaba.dubbo.performance.demo.agent.mesh.consumer.agent;
 
 import com.alibaba.dubbo.performance.demo.agent.dubbo.model.RpcResponse;
 import com.alibaba.dubbo.performance.demo.agent.mesh.model.ChannelHolder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.netty.handler.codec.http.HttpHeaders.Names.CONNECTION;
 import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_LENGTH;
 import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
 
 public class AgentClientHandler extends SimpleChannelInboundHandler<RpcResponse> {
+    private ConcurrentHashMap<String, Channel> channelMap;
+
+    public AgentClientHandler(ConcurrentHashMap<String, Channel> map) {
+        this.channelMap = map;
+    }
+
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcResponse response) {
         String requestId = response.getRequestId();
@@ -21,7 +30,7 @@ public class AgentClientHandler extends SimpleChannelInboundHandler<RpcResponse>
         resp.headers().set(CONTENT_TYPE, "text/plain; charset=UTF-8");
         resp.headers().set(CONTENT_LENGTH, buf.readableBytes());
 //        resp.headers().set(CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
-        ChannelHolder.channelMap.get(requestId).writeAndFlush(resp);
-        ChannelHolder.channelMap.remove(requestId);
+        channelMap.get(requestId).writeAndFlush(resp);
+        channelMap.remove(requestId);
     }
 }

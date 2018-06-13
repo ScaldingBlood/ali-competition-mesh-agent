@@ -1,4 +1,4 @@
-package com.alibaba.dubbo.performance.demo.agent.mesh.consumer;
+package com.alibaba.dubbo.performance.demo.agent.mesh.consumer.agent;
 
 import com.alibaba.dubbo.performance.demo.agent.mesh.model.AgentRequest;
 import io.netty.buffer.ByteBuf;
