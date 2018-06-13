@@ -1,0 +1,12 @@
+syntax = "proto2";
+package com.alibaba.dubbo.performance.demo.agent.dubbo.model;
+option java_package = "com.alibaba.dubbo.performance.demo.agent.dubbo.model";
+option java_outer_classname = "ProtoRequest";
+
+message Request {
+    required int64 id = 1;
+    required string methodName = 2;
+    required string interfaceNama = 3;
+    required string parameterTypes = 4;
+    required string arguments = 5;
+};

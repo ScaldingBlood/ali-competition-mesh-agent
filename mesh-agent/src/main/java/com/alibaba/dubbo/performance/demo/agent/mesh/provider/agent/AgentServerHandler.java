@@ -8,7 +8,11 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
-public class AgentServerHandler extends SimpleChannelInboundHandler<AgentRequest> {
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+
+public class AgentServerHandler extends SimpleChannelInboundHandler<ProtoRequest.Request> {
     private RpcClient rpcClient;
 
     public AgentServerHandler(RpcClient client) {
@@ -16,12 +20,25 @@ public class AgentServerHandler extends SimpleChannelInboundHandler<AgentRequest
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, AgentRequest request) throws  Exception {
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, ProtoRequest.Request request) throws  Exception {
 //        System.out.println(System.currentTimeMillis() + "hello");//////////////
-        long requestId = request.getId();
-//        ChannelHolder.channelMap.put(String.valueOf(requestId), channel);
         if(ChannelHolder.channel == null || !ChannelHolder.channel.isActive())
             ChannelHolder.channel = channelHandlerContext.channel();
-        rpcClient.invoke((RpcInvocation) request.getData(), requestId);
+        rpcClient.invoke(request.getInterfaceNama(),
+                request.getMethodName(),
+                request.getParameterTypes(),
+                request.getArguments(),
+                request.getId());
     }
+
+
+//    @Override
+//    protected void channelRead0(ChannelHandlerContext channelHandlerContext, AgentRequest request) throws  Exception {
+////        System.out.println(System.currentTimeMillis() + "hello");//////////////
+//        long requestId = request.getId();
+////        ChannelHolder.channelMap.put(String.valueOf(requestId), channel);
+//        if(ChannelHolder.channel == null || !ChannelHolder.channel.isActive())
+//            ChannelHolder.channel = channelHandlerContext.channel();
+//        rpcClient.invoke((RpcInvocation) request.getData(), requestId);
+//    }
 }

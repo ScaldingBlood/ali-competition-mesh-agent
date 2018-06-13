@@ -1,9 +1,0 @@
-syntax = "proto2";
-package com.alibaba.dubbo.performance.demo.agent.dubbo.model;
-option java_package = "com.alibaba.dubbo.performance.demo.agent.dubbo.model";
-option java_outer_classname = "ProtoResponse";
-
-message Response {
-  required int64 id = 1;
-  required int64 res = 2;
-};
