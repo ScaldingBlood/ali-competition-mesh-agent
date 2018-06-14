@@ -30,8 +30,6 @@ public class ProviderAgentServer {
 
     private RpcClient rpcClient = new RpcClient();
 
-    public ProviderAgentServer() throws Exception {}
-
     public void start() {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup(7);

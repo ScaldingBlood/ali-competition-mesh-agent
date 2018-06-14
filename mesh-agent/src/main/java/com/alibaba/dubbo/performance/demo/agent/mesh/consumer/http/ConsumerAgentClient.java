@@ -32,7 +32,7 @@ public class ConsumerAgentClient {
             Channel channel = connectManager.getChannel(e.getHost(), e.getPort());
             channelList.add(channel);
 
-            ConcurrentHashMap<String, Channel> map = new ConcurrentHashMap<>(512);
+            ConcurrentHashMap<String, Channel> map = new ConcurrentHashMap<>();
             ChannelHolder.maps.put(channel, map);
             mapList.add(map);
         }
@@ -61,10 +61,7 @@ public class ConsumerAgentClient {
 
         mapList.get(pos).put(String.valueOf(id), targetChannel);
 
-        Channel channel = channelList.get(pos);
-        if(!channel.isOpen())
-            channel = connectManager.getChannel(endpoints.get(pos).getHost(), endpoints.get(pos).getPort());
-        channel.writeAndFlush(builder.build());
+        channelList.get(pos).writeAndFlush(builder.build());
 //        System.out.println(System.currentTimeMillis());///////////////
     }
 }

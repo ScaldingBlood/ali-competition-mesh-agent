@@ -22,19 +22,13 @@ public class RpcClient {
         this.connectManager = new ConnecManager();
     }
 
-    private Channel channel;
-
-    public RpcClient() throws Exception{
+    public RpcClient() {
         this.connectManager = new ConnecManager();
-        channel = connectManager.getChannel();
     }
 
     public void invoke(String interfaceName, String method, String parameterTypesString, String parameter, long requestId) throws Exception {
 
-//        Channel channel = connectManager.getChannel();
-        if(!channel.isOpen()) {
-            channel = connectManager.getChannel();
-        }
+        Channel channel = connectManager.getChannel();
 
         RpcInvocation invocation = new RpcInvocation();
         invocation.setMethodName(method);
@@ -47,8 +41,8 @@ public class RpcClient {
         invocation.setArguments(out.toByteArray());
 
         Request request = new Request();
-//        request.setVersion("2.0.0");
-//        request.setTwoWay(true);
+        request.setVersion("2.0.0");
+        request.setTwoWay(true);
         request.setData(invocation);
         request.setId(requestId);
 

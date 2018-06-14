@@ -1,6 +1,7 @@
 package com.alibaba.dubbo.performance.demo.agent.mesh.consumer.http;
 
 import com.alibaba.dubbo.performance.demo.agent.mesh.consumer.agent.AgentClientInitializer;
+import com.alibaba.dubbo.performance.demo.agent.mesh.model.ChannelHolder;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.UnpooledByteBufAllocator;
 import io.netty.channel.Channel;
@@ -11,6 +12,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class AgentConnectManager {
     private EventLoopGroup eventLoopGroup = new NioEventLoopGroup(8);
@@ -26,6 +28,7 @@ public class AgentConnectManager {
             if(!channel.isOpen()) {
                 channels.remove(host);
             }
+            return channel;
         }
 
         if (channels.get(host) == null){
