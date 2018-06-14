@@ -18,7 +18,7 @@ public class AgentConnectManager {
     private EventLoopGroup eventLoopGroup = new NioEventLoopGroup(8);
 
     private Bootstrap bootstrap;
-    private Map<String, Channel> channels = new HashMap<>();
+    private Map<String, Channel> channels = new HashMap<>(512);
 
     private Object lock = new Object();
 
