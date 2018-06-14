@@ -6,11 +6,11 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 
 public class RpcClientInitializer extends ChannelInitializer<SocketChannel> {
-    private static final int MAX_FRAME_LENGTH = 1024 * 1024;
-    private static final int LENGTH_FIELD_LENGTH = 4;
-    private static final int LENGTH_FIELD_OFFSET = 12;
-    private static final int LENGTH_ADJUSTMENT = 0;
-    private static final int INITIAL_BYTES_TO_STRIP = 4;
+//    private static final int MAX_FRAME_LENGTH = 1024 * 1024;
+//    private static final int LENGTH_FIELD_LENGTH = 4;
+//    private static final int LENGTH_FIELD_OFFSET = 12;
+//    private static final int LENGTH_ADJUSTMENT = 0;
+//    private static final int INITIAL_BYTES_TO_STRIP = 4;
 
     @Override
     protected void initChannel(SocketChannel socketChannel) {
