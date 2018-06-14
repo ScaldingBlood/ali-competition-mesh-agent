@@ -26,11 +26,7 @@ public class AgentClientHandler extends SimpleChannelInboundHandler<RpcResponse>
         resp.headers().set(CONTENT_LENGTH, buf.readableBytes());
 //        resp.headers().set(CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
         ConcurrentHashMap<String, Channel> map = ChannelHolder.maps.get(channelHandlerContext.channel());
-        try {
-            map.get(requestId).writeAndFlush(resp);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        map.get(requestId).writeAndFlush(resp);
         map.remove(requestId);
     }
 }

@@ -21,6 +21,7 @@ public class ConsumerAgentClient {
     private List<Channel> channelList = new ArrayList<>();
     private List<ConcurrentHashMap<String, Channel>> mapList = new ArrayList<>();
     private static AtomicLong atomicLong = new AtomicLong();
+    private final int channelSize;
 
 
     public ConsumerAgentClient() throws Exception {
@@ -35,6 +36,7 @@ public class ConsumerAgentClient {
             ChannelHolder.maps.put(channel, map);
             mapList.add(map);
         }
+        this.channelSize = endpoints.size();
     }
 
     public void sendRequest(String interfaceName, String method, String parameterTypesString, String parameter, Channel targetChannel) throws Exception {
@@ -47,9 +49,9 @@ public class ConsumerAgentClient {
         builder.setParameterTypes(parameterTypesString);
         builder.setArguments(parameter);
 
-        int tmp = Integer.MAX_VALUE;
+        int tmp = mapList.get(0).size();
         int pos = 0;
-        for(int i = 0; i < channelList.size(); i++) {
+        for(int i = 1; i < channelSize; i++) {
             int res = mapList.get(i).size();
             if(res < tmp) {
                 tmp = res;
