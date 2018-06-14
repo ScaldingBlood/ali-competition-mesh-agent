@@ -1,6 +1,5 @@
 package com.alibaba.dubbo.performance.demo.agent.mesh.consumer.agent;
 
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -8,8 +7,6 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.handler.timeout.ReadTimeoutHandler;
-
-import java.util.concurrent.ConcurrentHashMap;
 
 public class AgentClientInitializer extends ChannelInitializer<SocketChannel> {
     private static final int MAX_FRAME_LENGTH = 1024 * 4;
@@ -26,7 +23,7 @@ public class AgentClientInitializer extends ChannelInitializer<SocketChannel> {
 //        pipeline.addLast(new CustomerAgentEncoder());
         pipeline.addLast(new ProtobufVarint32LengthFieldPrepender());
         pipeline.addLast(new ProtobufEncoder());
-        pipeline.addLast(new ReadTimeoutHandler(10));
+//        pipeline.addLast(new ReadTimeoutHandler(10));
         pipeline.addLast(new AgentClientHandler());
     }
 }

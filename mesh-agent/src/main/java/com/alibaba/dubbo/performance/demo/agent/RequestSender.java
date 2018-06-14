@@ -30,6 +30,7 @@ public class RequestSender {
                         System.out.println(System.currentTimeMillis() - now);
                         result.setResult(ok);
                     } else {
+                        System.out.println("error!");
                         result.setResult(error);
                     }
                 } catch (Exception e) {

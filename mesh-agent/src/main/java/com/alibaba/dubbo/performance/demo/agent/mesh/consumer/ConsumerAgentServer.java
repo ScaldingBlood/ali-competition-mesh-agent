@@ -3,10 +3,8 @@ package com.alibaba.dubbo.performance.demo.agent.mesh.consumer;
 import com.alibaba.dubbo.performance.demo.agent.mesh.consumer.http.ConsumerAgentClient;
 import com.alibaba.dubbo.performance.demo.agent.mesh.consumer.http.HttpConsumerHandler;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.EventLoopGroup;
+import io.netty.buffer.UnpooledByteBufAllocator;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -27,6 +25,7 @@ public class ConsumerAgentServer {
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(bossGroup, workerGroup)
+                    .option(ChannelOption.ALLOCATOR, UnpooledByteBufAllocator.DEFAULT)
                     .channel(NioServerSocketChannel.class)
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         public void initChannel(SocketChannel channel) throws Exception {

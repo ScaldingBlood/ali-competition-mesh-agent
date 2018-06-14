@@ -8,6 +8,7 @@ import com.alibaba.dubbo.performance.demo.agent.mesh.provider.agent.ProviderAgen
 import com.alibaba.dubbo.performance.demo.agent.registry.EtcdRegistry;
 import com.alibaba.dubbo.performance.demo.agent.registry.IRegistry;
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.UnpooledByteBufAllocator;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -21,11 +22,11 @@ public class ProviderAgentServer {
     private IRegistry registry = new EtcdRegistry(System.getProperty("etcd.url"));
 
     private final int port = Integer.valueOf(System.getProperty("server.port"));
-    private static final int MAX_FRAME_LENGTH = 1024 * 4;
-    private static final int LENGTH_FIELD_LENGTH = 4;
-    private static final int LENGTH_FIELD_OFFSET = 0;
-    private static final int LENGTH_ADJUSTMENT = 8;
-    private static final int INITIAL_BYTES_TO_STRIP = 4;
+//    private static final int MAX_FRAME_LENGTH = 1024 * 4;
+//    private static final int LENGTH_FIELD_LENGTH = 4;
+//    private static final int LENGTH_FIELD_OFFSET = 0;
+//    private static final int LENGTH_ADJUSTMENT = 8;
+//    private static final int INITIAL_BYTES_TO_STRIP = 4;
 
     private RpcClient rpcClient = new RpcClient();
 
@@ -35,6 +36,7 @@ public class ProviderAgentServer {
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(bossGroup, workerGroup)
+                    .option(ChannelOption.ALLOCATOR, UnpooledByteBufAllocator.DEFAULT)
                     .channel(NioServerSocketChannel.class)
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
