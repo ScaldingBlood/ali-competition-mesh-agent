@@ -44,21 +44,21 @@ public class RpcClient {
         invocation.setArguments(out.toByteArray());
 
         Request request = new Request();
-//        request.setVersion("2.0.0");
-//        request.setTwoWay(true);
+        request.setVersion("2.0.0");
+        request.setTwoWay(true);
         request.setData(invocation);
         request.setId(requestId);
 
         channel.writeAndFlush(request);
     }
 
-//    public void invoke(RpcInvocation invocation, long requestId) throws Exception {
-//        Channel channel = connectManager.getChannel();
-//        Request request = new Request();
-//        request.setData(invocation);
-//        request.setId(requestId);
-//
-//
-//        channel.writeAndFlush(request);
-//    }
+    public void invoke(RpcInvocation invocation, long requestId) throws Exception {
+        Channel channel = connectManager.getChannel();
+        Request request = new Request();
+        request.setData(invocation);
+        request.setId(requestId);
+
+
+        channel.writeAndFlush(request);
+    }
 }

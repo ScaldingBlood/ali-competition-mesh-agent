@@ -1,7 +1,6 @@
 package com.alibaba.dubbo.performance.demo.agent.mesh.consumer.http;
 
 import com.alibaba.dubbo.performance.demo.agent.mesh.consumer.agent.AgentClientInitializer;
-import com.alibaba.dubbo.performance.demo.agent.mesh.model.ChannelHolder;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.UnpooledByteBufAllocator;
 import io.netty.channel.Channel;
