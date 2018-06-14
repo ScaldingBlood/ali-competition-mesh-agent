@@ -16,11 +16,6 @@ import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_LENGTH;
 import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
 
 public class AgentClientHandler extends SimpleChannelInboundHandler<RpcResponse> {
-    private ConcurrentHashMap<String, Channel> channelMap;
-
-    public AgentClientHandler(ConcurrentHashMap<String, Channel> map) {
-        this.channelMap = map;
-    }
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcResponse response) {
@@ -30,7 +25,7 @@ public class AgentClientHandler extends SimpleChannelInboundHandler<RpcResponse>
         resp.headers().set(CONTENT_TYPE, "text/plain; charset=UTF-8");
         resp.headers().set(CONTENT_LENGTH, buf.readableBytes());
 //        resp.headers().set(CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
-        channelMap.get(requestId).writeAndFlush(resp);
-        channelMap.remove(requestId);
+        ChannelHolder.maps.get(channelHandlerContext.channel()).get(requestId).writeAndFlush(resp);
+        ChannelHolder.maps.get(channelHandlerContext.channel()).remove(requestId);
     }
 }

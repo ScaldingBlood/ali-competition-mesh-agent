@@ -17,11 +17,6 @@ public class AgentClientInitializer extends ChannelInitializer<SocketChannel> {
     private static final int LENGTH_FIELD_OFFSET = 0;
     private static final int LENGTH_ADJUSTMENT = 8;
     private static final int INITIAL_BYTES_TO_STRIP = 4;
-    private ConcurrentHashMap<String, Channel> channelMap;
-
-    public AgentClientInitializer(ConcurrentHashMap<String, Channel> channelMap) {
-        this.channelMap = channelMap;
-    }
 
     @Override
     protected void initChannel(SocketChannel socketChannel) {
@@ -32,6 +27,6 @@ public class AgentClientInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(new ProtobufVarint32LengthFieldPrepender());
         pipeline.addLast(new ProtobufEncoder());
         pipeline.addLast(new ReadTimeoutHandler(10));
-        pipeline.addLast(new AgentClientHandler(channelMap));
+        pipeline.addLast(new AgentClientHandler());
     }
 }

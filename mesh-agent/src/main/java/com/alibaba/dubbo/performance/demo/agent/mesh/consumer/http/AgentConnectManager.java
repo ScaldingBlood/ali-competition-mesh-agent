@@ -1,6 +1,7 @@
 package com.alibaba.dubbo.performance.demo.agent.mesh.consumer.http;
 
 import com.alibaba.dubbo.performance.demo.agent.mesh.consumer.agent.AgentClientInitializer;
+import com.alibaba.dubbo.performance.demo.agent.mesh.model.ChannelHolder;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.UnpooledByteBufAllocator;
 import io.netty.channel.Channel;
@@ -16,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AgentConnectManager {
     private EventLoopGroup eventLoopGroup = new NioEventLoopGroup(8);
 
-    private Map<String, Bootstrap> bootstraps = new HashMap<>();
+    private Bootstrap bootstrap;
     private Map<String, Channel> channels = new HashMap<>();
 
     private Object lock = new Object();
@@ -27,24 +28,27 @@ public class AgentConnectManager {
             if(!channel.isOpen()) {
                 channels.remove(host);
             }
+            return channel;
         }
+
         if (channels.get(host) == null){
             synchronized (lock){
                 if (null == channels.get(host)){
-                    channels.put(host, bootstraps.get(host).connect(host, port).sync().channel());
+                    Channel c = bootstrap.connect(host, port).sync().channel();
+                    channels.put(host, c);
                 }
             }
         }
         return channels.get(host);
     }
 
-    public void initBootstrap(String host, ConcurrentHashMap<String, Channel> map) {
-        bootstraps.put(host, new Bootstrap()
+    public AgentConnectManager() {
+        bootstrap = new Bootstrap()
                 .group(eventLoopGroup)
                 .option(ChannelOption.SO_KEEPALIVE, true)
                 .option(ChannelOption.TCP_NODELAY, true)
                 .option(ChannelOption.ALLOCATOR, UnpooledByteBufAllocator.DEFAULT)
                 .channel(NioSocketChannel.class)
-                .handler(new AgentClientInitializer(map)));
+                .handler(new AgentClientInitializer());
     }
 }
