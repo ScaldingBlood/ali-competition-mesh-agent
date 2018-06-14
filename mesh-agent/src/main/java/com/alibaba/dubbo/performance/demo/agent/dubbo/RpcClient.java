@@ -18,17 +18,20 @@ public class RpcClient {
 
     private ConnecManager connectManager;
 
+    private Channel channel;
+
     public RpcClient(IRegistry registry) {
         this.connectManager = new ConnecManager();
     }
 
-    public RpcClient() {
+    public RpcClient() throws Exception{
         this.connectManager = new ConnecManager();
+        channel = connectManager.getChannel();
     }
 
     public void invoke(String interfaceName, String method, String parameterTypesString, String parameter, long requestId) throws Exception {
 
-        Channel channel = connectManager.getChannel();
+//        Channel channel = connectManager.getChannel();
 
         RpcInvocation invocation = new RpcInvocation();
         invocation.setMethodName(method);
