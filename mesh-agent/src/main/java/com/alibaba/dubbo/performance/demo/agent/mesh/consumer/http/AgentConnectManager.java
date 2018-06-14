@@ -12,7 +12,6 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class AgentConnectManager {
     private EventLoopGroup eventLoopGroup = new NioEventLoopGroup(8);
