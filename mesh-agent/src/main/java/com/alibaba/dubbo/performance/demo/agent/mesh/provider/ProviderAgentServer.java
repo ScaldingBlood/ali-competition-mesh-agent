@@ -3,7 +3,6 @@ package com.alibaba.dubbo.performance.demo.agent.mesh.provider;
 import com.alibaba.dubbo.performance.demo.agent.dubbo.RpcClient;
 import com.alibaba.dubbo.performance.demo.agent.dubbo.model.ProtoRequest;
 import com.alibaba.dubbo.performance.demo.agent.mesh.provider.agent.AgentServerHandler;
-import com.alibaba.dubbo.performance.demo.agent.mesh.provider.agent.ProviderAgentDecoder;
 import com.alibaba.dubbo.performance.demo.agent.mesh.provider.agent.ProviderAgentEncoder;
 import com.alibaba.dubbo.performance.demo.agent.registry.EtcdRegistry;
 import com.alibaba.dubbo.performance.demo.agent.registry.IRegistry;
@@ -13,7 +12,6 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 
@@ -29,8 +27,6 @@ public class ProviderAgentServer {
 //    private static final int INITIAL_BYTES_TO_STRIP = 4;
 
     private RpcClient rpcClient = new RpcClient();
-
-    public ProviderAgentServer() throws Exception{}
 
     public void start() {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);

@@ -18,12 +18,16 @@ public class HttpConsumerHandler extends SimpleChannelInboundHandler<FullHttpReq
         byte[] content = new byte[request.content().readableBytes()];
         request.content().readBytes(content);
         String[] contentStr = URLDecoder.decode(new String(content), "UTF-8").split("&");
-        consumerAgentClient.sendRequest(
-                contentStr[0].split("=")[1],
-                contentStr[1].split("=")[1],
-                contentStr[2].split("=")[1],
-                contentStr[3].endsWith("=") ? "" : contentStr[3].split("=")[1],
-                channelHandlerContext.channel()
-        );
+        try {
+            consumerAgentClient.sendRequest(
+                    contentStr[0].split("=")[1],
+                    contentStr[1].split("=")[1],
+                    contentStr[2].split("=")[1],
+                    contentStr[3].endsWith("=") ? "" : contentStr[3].split("=")[1],
+                    channelHandlerContext.channel()
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
