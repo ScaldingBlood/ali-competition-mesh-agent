@@ -61,6 +61,8 @@ public class ConsumerAgentClient {
 
         mapList.get(pos).put(String.valueOf(id), targetChannel);
 
+        if(!channelList.get(pos).isWritable())
+            channelList.set(pos, connectManager.getChannel(endpoints.get(pos).getHost(), endpoints.get(pos).getPort()));
         channelList.get(pos).writeAndFlush(builder.build());
 //        System.out.println(System.currentTimeMillis());///////////////
     }

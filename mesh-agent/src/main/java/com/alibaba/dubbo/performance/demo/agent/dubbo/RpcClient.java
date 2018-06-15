@@ -18,24 +18,17 @@ public class RpcClient {
 
     private ConnecManager connectManager;
 
-    private Channel channel;
-
     public RpcClient(IRegistry registry) {
         this.connectManager = new ConnecManager();
     }
 
     public RpcClient() {
         this.connectManager = new ConnecManager();
-        try {
-            this.channel = connectManager.getChannel();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public void invoke(String interfaceName, String method, String parameterTypesString, String parameter, long requestId) throws Exception {
 
-//        Channel channel = connectManager.getChannel();
+        Channel channel = connectManager.getChannel();
 
         RpcInvocation invocation = new RpcInvocation();
         invocation.setMethodName(method);
@@ -56,13 +49,13 @@ public class RpcClient {
         channel.writeAndFlush(request);
     }
 
-    public void invoke(RpcInvocation invocation, long requestId) throws Exception {
-        Channel channel = connectManager.getChannel();
-        Request request = new Request();
-        request.setData(invocation);
-        request.setId(requestId);
-
-
-        channel.writeAndFlush(request);
-    }
+//    public void invoke(RpcInvocation invocation, long requestId) throws Exception {
+//        Channel channel = connectManager.getChannel();
+//        Request request = new Request();
+//        request.setData(invocation);
+//        request.setId(requestId);
+//
+//
+//        channel.writeAndFlush(request);
+//    }
 }
