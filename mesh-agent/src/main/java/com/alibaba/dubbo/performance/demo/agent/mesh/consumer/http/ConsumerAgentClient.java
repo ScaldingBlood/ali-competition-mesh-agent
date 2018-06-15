@@ -7,6 +7,8 @@ import com.alibaba.dubbo.performance.demo.agent.registry.Endpoint;
 import com.alibaba.dubbo.performance.demo.agent.registry.EtcdRegistry;
 import com.alibaba.dubbo.performance.demo.agent.registry.IRegistry;
 import io.netty.channel.Channel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class ConsumerAgentClient {
     private AgentConnectManager connectManager;
+    private Logger logger = LoggerFactory.getLogger(ConsumerAgentClient.class);
 
     private IRegistry registry;
     private List<Endpoint> endpoints;
@@ -58,7 +61,7 @@ public class ConsumerAgentClient {
                 pos = i;
             }
         }
-
+        logger.info("Pos" + pos);
         mapList.get(pos).put(String.valueOf(id), targetChannel);
 
         if(!channelList.get(pos).isWritable())
