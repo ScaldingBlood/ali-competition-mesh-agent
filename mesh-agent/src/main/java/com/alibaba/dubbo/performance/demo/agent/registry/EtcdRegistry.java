@@ -43,8 +43,7 @@ public class EtcdRegistry implements IRegistry{
             // 如果是provider，去etcd注册服务
             try {
                 int port = Integer.valueOf(System.getProperty("server.port"));
-                String size = System.getProperty("size");
-                register("com.alibaba.dubbo.performance.demo.provider.IHelloService",port,size);
+                register("com.alibaba.dubbo.performance.demo.provider.IHelloService",port);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -52,9 +51,9 @@ public class EtcdRegistry implements IRegistry{
     }
 
     // 向ETCD中注册服务
-    public void register(String serviceName,int port,String size) throws Exception {
-        // 服务注册的key为:    /dubbomesh/com.some.package.IHelloService/192.168.100.100:2000-size
-        String strKey = MessageFormat.format("/{0}/{1}/{2}:{3}-{4}",rootPath,serviceName,IpHelper.getHostIp(),String.valueOf(port),size);
+    public void register(String serviceName,int port) throws Exception {
+        // 服务注册的key为:    /dubbomesh/com.some.package.IHelloService/192.168.100.100:2000
+        String strKey = MessageFormat.format("/{0}/{1}/{2}:{3}",rootPath,serviceName,IpHelper.getHostIp(),String.valueOf(port));
         ByteSequence key = ByteSequence.fromString(strKey);
         ByteSequence val = ByteSequence.fromString("");     // 目前只需要创建这个key,对应的value暂不使用,先留空
         kv.put(key,val, PutOption.newBuilder().withLeaseId(leaseId).build()).get();
@@ -88,11 +87,9 @@ public class EtcdRegistry implements IRegistry{
             String endpointStr = s.substring(index + 1,s.length());
 
             String host = endpointStr.split(":")[0];
-            String tmp = endpointStr.split(":")[1];
-            int port = Integer.valueOf(tmp.split("-")[0]);
-            String size = tmp.split("-")[1];
+            int port = Integer.valueOf(endpointStr.split(":")[1]);
 
-            endpoints.add(new Endpoint(host,port,size));
+            endpoints.add(new Endpoint(host,port));
         }
         return endpoints;
     }

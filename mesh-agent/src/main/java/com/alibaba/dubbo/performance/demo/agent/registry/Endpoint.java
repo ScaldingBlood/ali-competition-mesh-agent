@@ -3,12 +3,10 @@ package com.alibaba.dubbo.performance.demo.agent.registry;
 public class Endpoint {
     private final String host;
     private final int port;
-    private final String size;
 
-    public Endpoint(String host,int port, String size){
+    public Endpoint(String host,int port){
         this.host = host;
         this.port = port;
-        this.size = size;
     }
 
     public String getHost() {
@@ -19,12 +17,8 @@ public class Endpoint {
         return port;
     }
 
-    public String getSize() {
-        return size;
-    }
-
     public String toString(){
-        return host + ":" + port + "-" + size;
+        return host + ":" + port;
     }
 
     public boolean equals(Object o){
