@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class ConsumerAgentClient {
     private AgentConnectManager connectManager;
-    private Logger logger = LoggerFactory.getLogger(ConsumerAgentClient.class);
+//    private Logger logger = LoggerFactory.getLogger(ConsumerAgentClient.class);
 
     private IRegistry registry;
     private List<Endpoint> endpoints;
@@ -75,7 +75,7 @@ public class ConsumerAgentClient {
         } else if(tmp < 8) {
             pos = 1;
         }
-        logger.info("Pos" + pos);
+//        logger.info("Pos" + pos);
         mapList.get(pos).put(String.valueOf(id), targetChannel);
 
         if(!channelList.get(pos).isWritable())

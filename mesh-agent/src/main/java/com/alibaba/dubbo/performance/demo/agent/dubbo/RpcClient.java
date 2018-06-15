@@ -14,7 +14,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
 public class RpcClient {
-    private Logger logger = LoggerFactory.getLogger(RpcClient.class);
+//    private Logger logger = LoggerFactory.getLogger(RpcClient.class);
 
     private ConnecManager connectManager;
 
