@@ -49,11 +49,11 @@ public class ConsumerAgentClient {
         builder.setParameterTypes(parameterTypesString);
         builder.setArguments(parameter);
 
-        int tmp = mapList.get(0).size();
-        int pos = 0;
-        for(int i = 1; i < channelSize; i++) {
+        int pos = (int)(id % channelSize);
+        int tmp = mapList.get(pos).size();
+        for(int i = 0; i < channelSize; i++) {
             int res = mapList.get(i).size();
-            if(res <= tmp) {
+            if(res < tmp) {
                 tmp = res;
                 pos = i;
             }
