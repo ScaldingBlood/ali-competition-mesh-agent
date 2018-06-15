@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -21,10 +22,9 @@ public class ConsumerAgentClient {
 
     private IRegistry registry;
     private List<Endpoint> endpoints;
-    private List<Channel> channelList;
-    private List<ConcurrentHashMap<String, Channel>> mapList;
+    private Map<String, Channel> channelList;
+    private Map<String, ConcurrentHashMap<String, Channel>> mapList;
     private static AtomicLong atomicLong = new AtomicLong();
-    private final int channelSize;
 
 
     public ConsumerAgentClient() throws Exception {
@@ -32,21 +32,16 @@ public class ConsumerAgentClient {
         endpoints = registry.find("com.alibaba.dubbo.performance.demo.provider.IHelloService");
         connectManager = new AgentConnectManager();
         int[] size = new int[] {160, 180, 200}; // map initial size
-        channelList = new ArrayList<>(endpoints.size());
-        mapList = new ArrayList<>(endpoints.size());
+        channelList = new ConcurrentHashMap<>();
+        mapList = new ConcurrentHashMap<>();
 
         for(int i = 0; i < endpoints.size(); i++) {
             Channel channel = connectManager.getChannel(endpoints.get(i).getHost(), endpoints.get(i).getPort());
-            ConcurrentHashMap<String, Channel> map;
-            switch(endpoints.get(i).getSize()) {
-                case "small":map = new ConcurrentHashMap<>(size[0]); mapList.set(0, map);break;
-                case "medium":map = new ConcurrentHashMap<>(size[1]); mapList.set(1, map);break;
-                case "large":map= new ConcurrentHashMap<>(size[2]); mapList.set(2, map);break;
-                default:map = new ConcurrentHashMap<>();
-            }
+            ConcurrentHashMap<String, Channel> map = new ConcurrentHashMap<>(size[0]);
+            mapList.put(endpoints.get(i).getSize(), map);
+            channelList.put(endpoints.get(i).getSize(), channel);
             ChannelHolder.maps.put(channel, map);
         }
-        this.channelSize = endpoints.size();
     }
 
     public void sendRequest(String interfaceName, String method, String parameterTypesString, String parameter, Channel targetChannel) throws Exception {
@@ -59,7 +54,6 @@ public class ConsumerAgentClient {
         builder.setParameterTypes(parameterTypesString);
         builder.setArguments(parameter);
 
-        int pos = 2;
 //        int pos = 0;
 //        int tmp = mapList.get(0).size();
 //        for(int i = 1; i < channelSize; i++) {
@@ -69,18 +63,21 @@ public class ConsumerAgentClient {
 //                pos = i;
 //            }
 //        }
+        String size = "large";
         int tmp = (int)(id % 15);
         if(tmp < 3){
-            pos = 0;
+            size = "small";
         } else if(tmp < 8) {
-            pos = 1;
+            size = "medium";
         }
 //        logger.info("Pos" + pos);
-        mapList.get(pos).put(String.valueOf(id), targetChannel);
+        mapList.get(size).put(String.valueOf(id), targetChannel);
 
-        if(!channelList.get(pos).isWritable())
-            channelList.set(pos, connectManager.getChannel(endpoints.get(pos).getHost(), endpoints.get(pos).getPort()));
-        channelList.get(pos).writeAndFlush(builder.build());
+        if(!channelList.get(size).isWritable())
+            for(Endpoint e : endpoints)
+                if(size.equals(e.getSize()))
+                    channelList.put(size, connectManager.getChannel(e.getHost(), e.getPort()));
+        channelList.get(size).writeAndFlush(builder.build());
 //        System.out.println(System.currentTimeMillis());///////////////
     }
 }
