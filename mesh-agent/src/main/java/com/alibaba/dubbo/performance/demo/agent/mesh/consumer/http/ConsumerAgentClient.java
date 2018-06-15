@@ -21,8 +21,8 @@ public class ConsumerAgentClient {
 
     private IRegistry registry;
     private List<Endpoint> endpoints;
-    private List<Channel> channelList = new ArrayList<>();
-    private List<ConcurrentHashMap<String, Channel>> mapList = new ArrayList<>();
+    private List<Channel> channelList;
+    private List<ConcurrentHashMap<String, Channel>> mapList;
     private static AtomicLong atomicLong = new AtomicLong();
     private final int channelSize;
 
@@ -31,13 +31,20 @@ public class ConsumerAgentClient {
         registry = new EtcdRegistry(System.getProperty("etcd.url"));
         endpoints = registry.find("com.alibaba.dubbo.performance.demo.provider.IHelloService");
         connectManager = new AgentConnectManager();
-        for(Endpoint e : endpoints) {
-            Channel channel = connectManager.getChannel(e.getHost(), e.getPort());
-            channelList.add(channel);
+        int[] size = new int[] {160, 180, 200}; // map initial size
+        channelList = new ArrayList<>(endpoints.size());
+        mapList = new ArrayList<>(endpoints.size());
 
-            ConcurrentHashMap<String, Channel> map = new ConcurrentHashMap<>(180);
+        for(int i = 0; i < endpoints.size(); i++) {
+            Channel channel = connectManager.getChannel(endpoints.get(i).getHost(), endpoints.get(i).getPort());
+            ConcurrentHashMap<String, Channel> map;
+            switch(endpoints.get(i).getSize()) {
+                case "small":map = new ConcurrentHashMap<>(size[0]); mapList.set(0, map);break;
+                case "medium":map = new ConcurrentHashMap<>(size[1]); mapList.set(1, map);break;
+                case "large":map= new ConcurrentHashMap<>(size[2]); mapList.set(2, map);break;
+                default:map = new ConcurrentHashMap<>();
+            }
             ChannelHolder.maps.put(channel, map);
-            mapList.add(map);
         }
         this.channelSize = endpoints.size();
     }
@@ -52,14 +59,21 @@ public class ConsumerAgentClient {
         builder.setParameterTypes(parameterTypesString);
         builder.setArguments(parameter);
 
-        int tmp = mapList.get(0).size();
-        int pos = 0;
-        for(int i = 1; i < channelSize; i++) {
-            int res = mapList.get(i).size();
-            if(res < tmp) {
-                tmp = res;
-                pos = i;
-            }
+        int pos = 2;
+//        int pos = 0;
+//        int tmp = mapList.get(0).size();
+//        for(int i = 1; i < channelSize; i++) {
+//            int res = mapList.get(i).size();
+//            if(res < tmp) {
+//                tmp = res;
+//                pos = i;
+//            }
+//        }
+        int tmp = (int)(id % 15);
+        if(tmp < 3){
+            pos = 0;
+        } else if(tmp < 8) {
+            pos = 1;
         }
         logger.info("Pos" + pos);
         mapList.get(pos).put(String.valueOf(id), targetChannel);
