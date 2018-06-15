@@ -53,7 +53,7 @@ public class ConsumerAgentClient {
         int pos = 0;
         for(int i = 1; i < channelSize; i++) {
             int res = mapList.get(i).size();
-            if(res < tmp) {
+            if(res <= tmp) {
                 tmp = res;
                 pos = i;
             }
