@@ -39,6 +39,7 @@ public class RpcClient {
         PrintWriter writer = new PrintWriter(new OutputStreamWriter(out));
         JsonUtils.writeObject(parameter, writer);
         invocation.setArguments(out.toByteArray());
+        writer.close();
 
         Request request = new Request();
 //        request.setVersion("2.0.0");
