@@ -27,7 +27,7 @@ public class HttpConsumerHandler extends SimpleChannelInboundHandler<FullHttpReq
 //        );
         String contentStr = URLDecoder.decode(new String(content), "UTF-8");
         consumerAgentClient.sendRequest(
-                "com.alibaba.performance.dubbomesh.provider.IHelloService",
+                "com.alibaba.dubbo.performance.demo.provider.IHelloService",
                 "hash",
                 "Ljava/lang/String;",
                 contentStr.substring(contentStr.lastIndexOf("=") + 1, contentStr.length()),
