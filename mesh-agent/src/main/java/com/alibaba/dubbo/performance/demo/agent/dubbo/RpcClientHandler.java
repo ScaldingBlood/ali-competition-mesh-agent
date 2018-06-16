@@ -12,6 +12,6 @@ public class RpcClientHandler extends SimpleChannelInboundHandler<RpcResponse> {
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcResponse response) {
 //        ChannelHolder.channelMap.get(response.getRequestId()).writeAndFlush(response);
 //        ChannelHolder.channelMap.remove(response.getRequestId());
-        ChannelHolder.rpcChannels.get(Long.valueOf(response.getRequestId()) % 2).writeAndFlush(response);
+        ChannelHolder.channel.writeAndFlush(response);
     }
 }

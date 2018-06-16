@@ -22,9 +22,8 @@ public class AgentServerHandler extends SimpleChannelInboundHandler<ProtoRequest
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, ProtoRequest.Request request) throws  Exception {
 //        System.out.println(System.currentTimeMillis() + "hello");//////////////
-        Channel channel = ChannelHolder.rpcChannels.get(request.getId() % 2);
-        if(channel == null || !channel.isActive())
-            ChannelHolder.rpcChannels.put(request.getId() % 2, channelHandlerContext.channel());
+        if(ChannelHolder.channel == null || !ChannelHolder.channel.isActive())
+            ChannelHolder.channel = channelHandlerContext.channel();
         rpcClient.invoke(request.getInterfaceNama(),
                 request.getMethodName(),
                 request.getParameterTypes(),

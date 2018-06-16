@@ -20,24 +20,23 @@ public class AgentConnectManager {
 
     private Object lock = new Object();
 
-    public Channel getChannel(String host, int port, long requestId) throws Exception {
-        String key = host + (requestId % 2);
-        if (null != channels.get(key)) {
-            Channel channel = channels.get(key);
+    public Channel getChannel(String host, int port) throws Exception {
+        if (null != channels.get(host)) {
+            Channel channel = channels.get(host);
             if(!channel.isOpen()) {
-                channels.remove(key);
+                channels.remove(host);
             }
         }
 
-        if (channels.get(key) == null){
+        if (channels.get(host) == null){
             synchronized (lock){
-                if (null == channels.get(key)){
+                if (null == channels.get(host)){
                     Channel c = bootstrap.connect(host, port).sync().channel();
-                    channels.put(key, c);
+                    channels.put(host, c);
                 }
             }
         }
-        return channels.get(key);
+        return channels.get(host);
     }
 
     public AgentConnectManager() {
