@@ -28,4 +28,28 @@ public class JsonUtils {
         writer.print(new String(b));
         writer.flush();
     }
+
+    public static void writeRpcInvocation(RpcInvocation inv, PrintWriter writer) throws IOException {
+        SerializeWriter out = new SerializeWriter();
+        JSONSerializer serializer = new JSONSerializer(out);
+        serializer.config(SerializerFeature.WriteEnumUsingToString, true);
+
+        serializer.write(inv.getAttachment("dubbo", "2.0.1"));
+        serializer.write("\n");
+        serializer.write(inv.getAttachment("path"));
+        serializer.write("\n");
+        serializer.write(inv.getAttachment("version"));
+        serializer.write("\n");
+        serializer.write(inv.getMethodName());
+        serializer.write("\n");
+        serializer.write(inv.getParameterTypes());
+        serializer.write("\n");
+        serializer.write(new String(inv.getArguments()));
+        serializer.write(inv.getAttachments());
+
+        out.writeTo(writer);
+        out.close(); // for reuse SerializeWriter buf
+        writer.println();
+        writer.flush();
+    }
 }

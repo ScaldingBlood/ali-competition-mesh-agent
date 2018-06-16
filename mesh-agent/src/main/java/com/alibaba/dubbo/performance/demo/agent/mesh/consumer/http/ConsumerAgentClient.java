@@ -50,14 +50,14 @@ public class ConsumerAgentClient {
         builder.setArguments(parameter);
 
         int pos = (int)(id % channelSize);
-//        int tmp = mapList.get(pos).size();
-//        for(int i = 0; i < channelSize && i != pos; i++) {
-//            int res = mapList.get(i).size();
-//            if(res < tmp) {
-//                tmp = res;
-//                pos = i;
-//            }
-//        }
+        int tmp = mapList.get(pos).size();
+        for(int i = 0; i < channelSize && i != pos; i++) {
+            int res = mapList.get(i).size();
+            if(res < tmp) {
+                tmp = res;
+                pos = i;
+            }
+        }
 
         mapList.get(pos).put(String.valueOf(id), targetChannel);
 

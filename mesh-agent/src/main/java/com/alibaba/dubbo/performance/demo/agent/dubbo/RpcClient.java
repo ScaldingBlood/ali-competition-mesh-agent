@@ -35,11 +35,15 @@ public class RpcClient {
         invocation.setAttachment("path", interfaceName);
         invocation.setParameterTypes(parameterTypesString);    // Dubbo内部用"Ljava/lang/String"来表示参数类型是String
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        PrintWriter writer = new PrintWriter(new OutputStreamWriter(out));
-        JsonUtils.writeObject(parameter, writer);
-        invocation.setArguments(out.toByteArray());
-        writer.close();
+//        ByteArrayOutputStream out = new ByteArrayOutputStream();
+//        PrintWriter writer = new PrintWriter(new OutputStreamWriter(out));
+//        JsonUtils.writeObject(parameter, writer);
+//        invocation.setArguments(out.toByteArray());
+//        System.out.println(parameter);
+//        System.out.println(new String(invocation.getArguments()));
+//        System.out.println(("\"" + parameter + "\"\n").equals(new String(invocation.getArguments())));
+//        writer.close();
+        invocation.setArguments(("\"" + parameter + "\"\n").getBytes());
 
         Request request = new Request();
 //        request.setVersion("2.0.0");
