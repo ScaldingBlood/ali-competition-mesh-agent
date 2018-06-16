@@ -8,23 +8,20 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 public class ConnecManager {
     private EventLoopGroup eventLoopGroup = new NioEventLoopGroup(8);
 
     private Bootstrap bootstrap;
 
-    private ConcurrentHashMap<Integer,Channel> channels = new ConcurrentHashMap<>();
+    private Channel channel;
     private Object lock = new Object();
 
     public ConnecManager() {
     }
 
-    public Channel getChannel(Long requestId) throws Exception {
-        int flag = (int)(requestId % 4);
-        if (null != channels.get(flag)) {
-            return channels.get(flag);
+    public Channel getChannel() throws Exception {
+        if (null != channel) {
+            return channel;
         }
 
         if (null == bootstrap) {
@@ -35,16 +32,16 @@ public class ConnecManager {
             }
         }
 
-        if (null == channels.get(flag)) {
+        if (null == channel) {
             synchronized (lock){
-                if (null == channels.get(flag)){
+                if (null == channel){
                     int port = Integer.valueOf(System.getProperty("dubbo.protocol.port"));
-                    channels.put(flag, bootstrap.connect("127.0.0.1", port).sync().channel());
+                    channel = bootstrap.connect("127.0.0.1", port).sync().channel();
                 }
             }
         }
 
-        return channels.get(flag);
+        return channel;
     }
 
     public void initBootstrap() {
