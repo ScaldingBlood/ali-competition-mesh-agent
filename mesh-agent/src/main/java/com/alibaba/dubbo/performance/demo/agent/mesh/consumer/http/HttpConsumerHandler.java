@@ -30,7 +30,7 @@ public class HttpConsumerHandler extends SimpleChannelInboundHandler<FullHttpReq
                 "com.alibaba.performance.dubbomesh.provider.IHelloService",
                 "hash",
                 "Ljava/lang/String;",
-                contentStr.substring(contentStr.lastIndexOf("="), contentStr.length()),
+                contentStr.substring(contentStr.lastIndexOf("=") + 1, contentStr.length()),
                 channelHandlerContext.channel()
         );
     }
