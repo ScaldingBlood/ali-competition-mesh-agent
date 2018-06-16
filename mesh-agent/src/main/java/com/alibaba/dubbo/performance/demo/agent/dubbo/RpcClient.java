@@ -28,7 +28,7 @@ public class RpcClient {
 
     public void invoke(String interfaceName, String method, String parameterTypesString, String parameter, long requestId) throws Exception {
 
-        Channel channel = connectManager.getChannel();
+        Channel channel = connectManager.getChannel(requestId);
 
         RpcInvocation invocation = new RpcInvocation();
         invocation.setMethodName(method);
