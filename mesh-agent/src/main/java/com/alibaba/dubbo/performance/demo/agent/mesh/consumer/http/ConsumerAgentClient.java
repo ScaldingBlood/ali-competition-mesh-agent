@@ -51,7 +51,7 @@ public class ConsumerAgentClient {
 
         int pos = (int)(id % channelSize);
         int tmp = mapList.get(pos).size();
-        for(int i = 0; i < channelSize; i++) {
+        for(int i = 0; i < channelSize && i != pos; i++) {
             int res = mapList.get(i).size();
             if(res < tmp) {
                 tmp = res;

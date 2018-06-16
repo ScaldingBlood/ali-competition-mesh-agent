@@ -17,12 +17,20 @@ public class HttpConsumerHandler extends SimpleChannelInboundHandler<FullHttpReq
     public void channelRead0(ChannelHandlerContext channelHandlerContext, FullHttpRequest request) throws Exception {
         byte[] content = new byte[request.content().readableBytes()];
         request.content().readBytes(content);
-        String[] contentStr = URLDecoder.decode(new String(content), "UTF-8").split("&");
+//        String[] contentStr = URLDecoder.decode(new String(content), "UTF-8").split("&");
+//        consumerAgentClient.sendRequest(
+//                contentStr[0].split("=")[1],
+//                contentStr[1].split("=")[1],
+//                contentStr[2].split("=")[1],
+//                contentStr[3].endsWith("=") ? "" : contentStr[3].split("=")[1],
+//                channelHandlerContext.channel()
+//        );
+        String contentStr = URLDecoder.decode(new String(content), "UTF-8");
         consumerAgentClient.sendRequest(
-                contentStr[0].split("=")[1],
-                contentStr[1].split("=")[1],
-                contentStr[2].split("=")[1],
-                contentStr[3].endsWith("=") ? "" : contentStr[3].split("=")[1],
+                "com.alibaba.performance.dubbomesh.provider.IHelloService",
+                "hash",
+                "Ljava/lang/String;",
+                contentStr.substring(contentStr.lastIndexOf("="), contentStr.length()),
                 channelHandlerContext.channel()
         );
     }
