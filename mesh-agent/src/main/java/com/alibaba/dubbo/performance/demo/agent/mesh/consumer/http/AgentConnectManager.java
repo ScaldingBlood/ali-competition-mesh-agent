@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AgentConnectManager {
-    private EventLoopGroup eventLoopGroup = new NioEventLoopGroup(8);
+    private EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
 
     private Bootstrap bootstrap;
     private Map<String, Channel> channels = new HashMap<>();
