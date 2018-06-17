@@ -32,7 +32,7 @@ public class ConsumerAgentClient {
             Channel channel = connectManager.getChannel(e.getHost(), e.getPort());
             channelList.add(channel);
 
-            ConcurrentHashMap<String, Channel> map = new ConcurrentHashMap<>(180);
+            ConcurrentHashMap<String, Channel> map = new ConcurrentHashMap<>(170);
             ChannelHolder.maps.put(channel, map);
             mapList.add(map);
         }
