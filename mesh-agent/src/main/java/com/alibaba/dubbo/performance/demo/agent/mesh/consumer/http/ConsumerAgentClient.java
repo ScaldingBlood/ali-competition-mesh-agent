@@ -10,6 +10,7 @@ import io.netty.channel.Channel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -40,7 +41,7 @@ public class ConsumerAgentClient {
     }
 
     public void sendRequest(String interfaceName, String method, String parameterTypesString, String parameter, Channel targetChannel) throws Exception {
-        long id = atomicLong.getAndIncrement();
+        long id = UUID.randomUUID().hashCode();
 
         ProtoRequest.Request.Builder builder = ProtoRequest.Request.newBuilder();
         builder.setId(id);
