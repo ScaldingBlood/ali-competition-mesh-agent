@@ -14,7 +14,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
 public class RpcClient {
-//    private Logger logger = LoggerFactory.getLogger(RpcClient.class);
+    private Logger logger = LoggerFactory.getLogger(RpcClient.class);
 
     private ConnecManager connectManager;
 
@@ -43,11 +43,7 @@ public class RpcClient {
 //        System.out.println(new String(invocation.getArguments()));
 //        System.out.println(("\"" + parameter + "\"\n").equals(new String(invocation.getArguments())));
 //        writer.close();
-        StringBuilder sb = new StringBuilder();
-        sb.append("\"");
-        sb.append(parameter);
-        sb.append("\"\n");
-        invocation.setArguments(sb.toString().getBytes());
+        invocation.setArguments(("\"" + parameter + "\"\n").getBytes());
 
         Request request = new Request();
 //        request.setVersion("2.0.0");
